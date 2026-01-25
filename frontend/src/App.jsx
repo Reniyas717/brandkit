@@ -11,8 +11,8 @@ function App() {
         <Route path="/" element={<BrandExperience />} />
         <Route path="/brand/:slug" element={<BrandExperience />} />
         <Route path="/products" element={<ProductExploration />} />
-        <Route path="/kit/build" element={<KitBuilder />} />
-        <Route path="/kit/review" element={<KitReview />} />
+        <Route path="/builder" element={<KitBuilder />} />
+        <Route path="/review" element={<KitReview />} />
         {/* Default catch-all */}
         <Route path="*" element={<BrandExperience />} />
       </Routes>

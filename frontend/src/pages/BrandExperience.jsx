@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useBrand } from '../hooks/useBrand';
 import { Button } from '../components/ui/button';
 import { CardContainer, CardBody, CardItem } from '../components/ui/3d-card';
@@ -612,6 +613,7 @@ const BentoProductGrid = ({ products }) => {
 
 const BrandExperience = () => {
     const { brand, loading } = useBrand('ecolux-essentials');
+    const navigate = useNavigate();
 
     const products = [
         { name: 'Organic Tote Bag', price: '49.99', description: 'Handwoven hemp tote with reinforced straps', image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80' },
@@ -668,6 +670,40 @@ const BrandExperience = () => {
                         <p className="text-xl text-gray-600">Experience our products in motion</p>
                     </motion.div>
                     <BentoProductGrid products={products} />
+                </div>
+            </section>
+
+            {/* CTA Section - Build Your Kit */}
+            <section className="py-32 bg-gradient-to-br from-emerald-500 to-emerald-600 relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10">
+                    <div className="absolute inset-0" style={{
+                        backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+                        backgroundSize: '50px 50px'
+                    }} />
+                </div>
+                <div className="container mx-auto px-8 relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="text-center max-w-3xl mx-auto"
+                    >
+                        <h2 className="text-6xl font-black text-white mb-6">
+                            Ready to Build Your Kit?
+                        </h2>
+                        <p className="text-xl text-emerald-50 mb-12">
+                            Create a personalized subscription box with your favorite sustainable products
+                        </p>
+                        <Button
+                            onClick={() => navigate('/builder')}
+                            size="lg"
+                            className="bg-white text-emerald-600 hover:bg-gray-100 text-xl px-12 py-6 shadow-2xl"
+                        >
+                            <FaShoppingCart className="mr-3" />
+                            Start Building
+                            <FaArrowRight className="ml-3" />
+                        </Button>
+                    </motion.div>
                 </div>
             </section>
         </div>
