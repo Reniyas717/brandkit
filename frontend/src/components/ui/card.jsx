@@ -1,5 +1,10 @@
 import * as React from "react"
-import { cn } from "../../lib/utils"
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs) {
+    return twMerge(clsx(inputs))
+}
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (
     <div
