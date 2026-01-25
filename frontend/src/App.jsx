@@ -1,16 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import BrandExperience from './pages/BrandExperience';
+import ProductExploration from './pages/ProductExploration';
+import KitBuilder from './pages/KitBuilder';
+import KitReview from './pages/KitReview';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-    
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<BrandExperience />} />
+        <Route path="/brand/:slug" element={<BrandExperience />} />
+        <Route path="/products" element={<ProductExploration />} />
+        <Route path="/kit/build" element={<KitBuilder />} />
+        <Route path="/kit/review" element={<KitReview />} />
+        {/* Default catch-all */}
+        <Route path="*" element={<BrandExperience />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
