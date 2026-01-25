@@ -5,7 +5,8 @@ import { useKitStore } from '../store/kitStore';
 import { useKit } from '../hooks/useKit';
 import { kitService } from '../services';
 import { Button } from '../components/ui/button';
-import { FaCheck, FaArrowLeft, FaBox, FaTruck, FaCalendar, FaEdit } from 'react-icons/fa';
+import Breadcrumbs from '../components/Breadcrumbs';
+import { FaCheck, FaArrowLeft, FaBox, FaTruck, FaCalendar, FaEdit, FaRotate } from 'react-icons/fa';
 
 const KitReview = () => {
     const navigate = useNavigate();
@@ -104,8 +105,11 @@ const KitReview = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-            {/* Header */}
+            {/* Header with Breadcrumbs */}
             <div className="bg-white border-b border-gray-100">
+                <div className="container mx-auto px-8 py-4">
+                    <Breadcrumbs />
+                </div>
                 <div className="container mx-auto px-8 py-6">
                     <button
                         onClick={() => navigate('/builder')}
@@ -183,8 +187,8 @@ const KitReview = () => {
                                         key={freq.id}
                                         onClick={() => setSelectedFrequency(freq.id)}
                                         className={`p-6 rounded-2xl border-2 transition-all ${selectedFrequency === freq.id
-                                                ? 'border-emerald-500 bg-emerald-50'
-                                                : 'border-gray-200 hover:border-gray-300'
+                                            ? 'border-emerald-500 bg-emerald-50'
+                                            : 'border-gray-200 hover:border-gray-300'
                                             }`}
                                     >
                                         <FaCalendar className={`w-6 h-6 mb-3 ${selectedFrequency === freq.id ? 'text-emerald-600' : 'text-gray-400'
