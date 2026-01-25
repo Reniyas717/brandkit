@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import useEmblaCarousel from 'embla-carousel-react';
-import Autoplay from 'embla-carousel-autoplay';
 import { useBrand } from '../hooks/useBrand';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
+import { ProductGrid } from '../components/ui/product-grid';
 import {
     FaLeaf, FaSeedling, FaRecycle, FaGlobeAmericas,
     FaHeart, FaShieldAlt, FaStar, FaArrowRight, FaArrowLeft,
@@ -434,58 +433,9 @@ const AsymmetricGrid = () => {
     );
 };
 
-// Premium Carousel
-const PremiumCarousel = ({ products }) => {
-    const [emblaRef] = useEmblaCarousel(
-        { loop: true, align: 'start', dragFree: true },
-        [Autoplay({ delay: 4000, stopOnInteraction: false })]
-    );
-
-    return (
-        <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-                {products.map((product, index) => (
-                    <motion.div
-                        key={index}
-                        className="flex-[0_0_400px] min-w-0"
-                        whileHover={{ y: -10 }}
-                    >
-                        <Card className="overflow-hidden group cursor-pointer h-full">
-                            <div className="relative h-96 overflow-hidden">
-                                <motion.img
-                                    src={product.image}
-                                    alt={product.name}
-                                    className="w-full h-full object-cover"
-                                    whileHover={{ scale: 1.1 }}
-                                    transition={{ duration: 0.6 }}
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                <motion.div className="absolute bottom-0 left-0 right-0 p-6 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                    <Button className="w-full bg-white text-black hover:bg-gray-100">
-                                        Quick Add <FaArrowRight className="ml-2" />
-                                    </Button>
-                                </motion.div>
-                            </div>
-                            <CardContent className="p-6">
-                                <div className="flex items-start justify-between mb-2">
-                                    <h3 className="text-xl font-bold">{product.name}</h3>
-                                    <div className="flex items-center gap-1 text-yellow-500">
-                                        <FaStar className="w-4 h-4 fill-current" />
-                                        <span className="text-sm font-semibold">4.9</span>
-                                    </div>
-                                </div>
-                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{product.description}</p>
-                                <div className="flex items-center justify-between">
-                                    <span className="text-2xl font-bold text-[#0EA5E9]">${product.price}</span>
-                                    <span className="text-xs text-gray-500 uppercase tracking-wide">In Stock</span>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                ))}
-            </div>
-        </div>
-    );
+// Premium Product Grid Display
+const ProductGridSection = ({ products }) => {
+    return <ProductGrid products={products} />;
 };
 
 const BrandExperience = () => {
@@ -543,9 +493,9 @@ const BrandExperience = () => {
                         className="text-center mb-16"
                     >
                         <h2 className="text-6xl font-black mb-4">Featured Products</h2>
-                        <p className="text-xl text-gray-600">Curated selection of our bestsellers</p>
+                        <p className="text-xl text-gray-600">Hover over products to see them pop out in 3D</p>
                     </motion.div>
-                    <PremiumCarousel products={products} />
+                    <ProductGridSection products={products} />
                 </div>
             </section>
         </div>
