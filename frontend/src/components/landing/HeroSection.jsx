@@ -122,13 +122,13 @@ const HeroLayout2 = ({ brand }) => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-none"
+                        className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-none font-outfit"
                     >
-                        <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                        <span className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-ocean-600 bg-clip-text text-transparent">
                             SUSTAINABLE
                         </span>
                         <br />
-                        <span className="text-gray-900">LIFESTYLE</span>
+                        <span className="text-earth-900 font-lora italic">LIFESTYLE</span>
                     </motion.h1>
 
                     <motion.p
@@ -215,12 +215,12 @@ const HeroLayout3 = ({ brand }) => {
                                 <FaLeaf className="w-8 h-8 text-blue-600" />
                             </div>
 
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
-                                <span className="text-gray-900">Design</span>
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight font-outfit">
+                                <span className="text-earth-800">Design</span>
                                 <br />
-                                <span className="text-gray-900">Meets</span>
+                                <span className="text-earth-700 font-lora italic">Meets</span>
                                 <br />
-                                <span className="bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                                <span className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-ocean-700 bg-clip-text text-transparent">
                                     SUSTAINABILITY
                                 </span>
                             </h1>

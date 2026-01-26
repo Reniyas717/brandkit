@@ -8,25 +8,25 @@ const OurMaterialsSection = () => {
             title: 'Organic Cotton',
             description: 'Premium organic cotton sourced from certified sustainable farms. Soft, breathable, and kind to your skin.',
             staticImage: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
-            hoverGif: 'https://images.unsplash.com/photo-1594211995257-2e11d08e7c10?w=800&q=80', // Close-up Fabric Texture
+            hoverGif: 'https://media.giphy.com/media/xT9IgN8YKRhByRBzMI/giphy.gif', // Cotton plant growing
         },
         {
             title: 'Hemp Fiber',
             description: 'Durable and sustainable hemp fiber that gets softer with every wash. Naturally resistant to mold and UV light.',
             staticImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80',
-            hoverGif: 'https://images.unsplash.com/photo-1518301592542-f6734e5a9591?w=800&q=80', // Natural Fiber Texture
+            hoverGif: 'https://media.giphy.com/media/3o6ZsYq8L7C8Zqzw7S/giphy.gif', // Plant growing timelapse
         },
         {
             title: 'Bamboo',
             description: 'Fast-growing renewable resource that requires no pesticides. Incredibly soft and naturally antibacterial.',
             staticImage: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
-            hoverGif: 'https://images.unsplash.com/photo-1627916535508-3693fb100862?w=800&q=80', // Bamboo Texture
+            hoverGif: 'https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif', // Bamboo swaying
         },
         {
             title: 'Recycled Materials',
             description: 'Giving new life to waste materials through innovative recycling processes. Reducing landfill and ocean pollution.',
             staticImage: 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&q=80',
-            hoverGif: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&q=80', // Recycled Pellets/Texture
+            hoverGif: 'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmVjeWNsaW5nYm90dGxlcw/3oEjI6SIIHBdRxXI40/giphy.gif', // Recycling symbol
         },
     ];
 
