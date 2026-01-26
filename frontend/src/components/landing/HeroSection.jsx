@@ -314,7 +314,7 @@ const AutoRotatingHero = ({ brand }) => {
             </AnimatePresence>
 
             {/* Indicators */}
-            <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex gap-2">
+            {/* <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 flex gap-2">
                 {heroes.map((_, index) => (
                     <button
                         key={index}
@@ -323,7 +323,7 @@ const AutoRotatingHero = ({ brand }) => {
                             }`}
                     />
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

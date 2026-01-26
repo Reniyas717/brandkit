@@ -26,45 +26,44 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'
+            className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-20 opacity-0'
                 }`}
         >
-            <div className="container mx-auto px-4 md:px-8">
-                <div className="flex items-center justify-between h-16 md:h-20">
-                    {/* Logo */}
-                    <Link to="/" className="flex items-center gap-2 group">
-                        <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center group-hover:bg-emerald-600 transition-colors">
-                            <FaLeaf className="w-5 h-5 text-white" />
-                        </div>
-                        <span className="text-xl md:text-2xl font-black text-gray-900">EcoLux</span>
-                    </Link>
-
-                    {/* Navigation Links */}
-                    <div className="hidden md:flex items-center gap-8">
-                        <a href="#materials" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                            Materials
-                        </a>
-                        <a href="#products" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                            Products
-                        </a>
-                        <a href="#about" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                            About
-                        </a>
-                        <Link
-                            to="/builder"
-                            className="px-6 py-2.5 bg-emerald-500 text-white rounded-xl font-bold hover:bg-emerald-600 transition-colors shadow-lg hover:shadow-xl"
-                        >
-                            Build Your Kit
-                        </Link>
+            <div className="bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-full shadow-lg shadow-black/5 px-6 py-3 flex items-center gap-8">
+                {/* Logo - Minimal */}
+                <Link to="/" className="flex items-center gap-2 group">
+                    <div className="w-8 h-8 bg-emerald-500 rounded-full flex items-center justify-center group-hover:bg-emerald-600 transition-colors">
+                        <FaLeaf className="w-4 h-4 text-white" />
                     </div>
+                </Link>
 
-                    {/* Mobile Menu Button */}
-                    <button className="md:hidden p-2">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    </button>
+                {/* Navigation Links */}
+                <div className="hidden md:flex items-center gap-6">
+                    <a href="#materials" className="text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors">
+                        Materials
+                    </a>
+                    <a href="#products" className="text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors">
+                        Products
+                    </a>
+                    <a href="#about" className="text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors">
+                        About
+                    </a>
                 </div>
+
+                {/* CTA */}
+                <Link
+                    to="/builder"
+                    className="px-4 py-2 bg-emerald-500 text-white text-sm rounded-full font-bold hover:bg-emerald-600 transition-colors shadow-lg shadow-emerald-500/20"
+                >
+                    Build Kit
+                </Link>
+
+                {/* Mobile Menu Button - Visible only on mobile */}
+                <button className="md:hidden text-gray-600 hover:text-black">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
             </div>
         </nav>
     );
