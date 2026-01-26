@@ -6,7 +6,7 @@ import { useKit } from '../hooks/useKit';
 import { kitService } from '../services';
 import { Button } from '../components/ui/button';
 import Breadcrumbs from '../components/Breadcrumbs';
-import { FaCheck, FaArrowLeft, FaBox, FaTruck, FaCalendar, FaEdit, FaRotate } from 'react-icons/fa';
+import { FaCheck, FaArrowLeft, FaBox, FaTruck, FaCalendar, FaEdit } from 'react-icons/fa';
 
 const KitReview = () => {
     const navigate = useNavigate();
