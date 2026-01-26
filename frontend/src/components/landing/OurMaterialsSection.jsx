@@ -44,20 +44,20 @@ const OurMaterialsSection = () => {
                     <p className="text-xl text-gray-600">Sourced responsibly, crafted beautifully</p>
                 </motion.div>
 
-                <div className="grid grid-cols-12 gap-6 auto-rows-[300px]">
+                <div className="grid grid-cols-12 gap-4 auto-rows-[200px]">
                     <motion.div
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="col-span-12 lg:col-span-8 row-span-2 relative overflow-hidden rounded-3xl group cursor-pointer"
+                        className="col-span-12 lg:col-span-8 row-span-2 relative overflow-hidden rounded-2xl group cursor-pointer"
                     >
                         <img src={items[0].image} alt={items[0].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className={`absolute inset-0 bg-gradient-to-br ${items[0].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-12 flex flex-col justify-end">
-                            <h3 className="text-5xl font-black text-white mb-4">{items[0].title}</h3>
-                            <p className="text-white/90 text-lg mb-6 max-w-md">{items[0].description}</p>
-                            <Button className="w-fit bg-white text-black hover:bg-gray-100">
-                                Explore <FaArrowRight className="ml-2" />
+                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                            <h3 className="text-3xl md:text-4xl font-black text-white mb-2">{items[0].title}</h3>
+                            <p className="text-white/90 text-sm md:text-base mb-4 max-w-md">{items[0].description}</p>
+                            <Button className="w-fit bg-white text-black hover:bg-gray-100 text-sm h-9 px-4">
+                                Explore <FaArrowRight className="ml-2 w-3 h-3" />
                             </Button>
                         </div>
                     </motion.div>
@@ -67,13 +67,13 @@ const OurMaterialsSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-3xl group cursor-pointer"
+                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
                     >
                         <img src={items[1].image} alt={items[1].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className={`absolute inset-0 bg-gradient-to-br ${items[1].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 className="text-3xl font-black text-white mb-2">{items[1].title}</h3>
-                            <p className="text-white/90 text-sm">{items[1].description}</p>
+                        <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h3 className="text-2xl font-black text-white mb-1">{items[1].title}</h3>
+                            <p className="text-white/90 text-xs">{items[1].description}</p>
                         </div>
                     </motion.div>
 
@@ -82,13 +82,13 @@ const OurMaterialsSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-3xl group cursor-pointer"
+                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
                     >
                         <img src={items[2].image} alt={items[2].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className={`absolute inset-0 bg-gradient-to-br ${items[2].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 className="text-3xl font-black text-white mb-2">{items[2].title}</h3>
-                            <p className="text-white/90 text-sm">{items[2].description}</p>
+                        <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                            <h3 className="text-2xl font-black text-white mb-1">{items[2].title}</h3>
+                            <p className="text-white/90 text-xs">{items[2].description}</p>
                         </div>
                     </motion.div>
 
@@ -97,14 +97,14 @@ const OurMaterialsSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 }}
-                        className="col-span-12 row-span-1 relative overflow-hidden rounded-3xl group cursor-pointer"
+                        className="col-span-12 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
                     >
                         <img src={items[3].image} alt={items[3].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                         <div className={`absolute inset-0 bg-gradient-to-r ${items[3].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 px-8 lg:px-12 flex items-center">
+                        <div className="absolute inset-0 px-8 flex items-center">
                             <div className="max-w-2xl">
-                                <h3 className="text-3xl lg:text-5xl font-black text-white mb-4">{items[3].title}</h3>
-                                <p className="text-white/90 text-xl">{items[3].description}</p>
+                                <h3 className="text-3xl font-black text-white mb-2">{items[3].title}</h3>
+                                <p className="text-white/90 text-lg">{items[3].description}</p>
                             </div>
                         </div>
                     </motion.div>

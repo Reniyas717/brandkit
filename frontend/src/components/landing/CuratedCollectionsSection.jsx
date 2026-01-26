@@ -1,156 +1,277 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CardContainer, CardBody, CardItem } from '../ui/3d-card';
-import { FaArrowRight, FaShoppingCart } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaShoppingCart, FaHeart, FaStar } from 'react-icons/fa';
 
-// Creative Bento Grid with Auto-Rotating Featured Product
 const CuratedCollectionsSection = ({ products }) => {
-    // State for auto-rotating featured product
-    const [featuredIndex, setFeaturedIndex] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+    const [hoveredCard, setHoveredCard] = useState(null);
 
-    // Auto-rotate effect
-    useEffect(() => {
-        if (!isAutoPlaying) return;
-        const interval = setInterval(() => {
-            setFeaturedIndex((prev) => (prev + 1) % products.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, [isAutoPlaying, products.length]);
-
-    // Current product logic
-    const featuredProduct = products[featuredIndex];
-    // Get 4 distinct products for the grid
-    const gridProducts = products.filter((_, i) => i !== featuredIndex).slice(0, 4);
+    // Split products for asymmetric layout
+    const heroProduct = products[0];
+    const sideProducts = products.slice(1, 3); // 2 small cards
+    const bottomProducts = products.slice(3, 6); // 3 medium cards
 
     return (
-        <section id="products" className="py-20 bg-gradient-to-b from-white to-gray-50 flex items-center">
-            <div className="container mx-auto px-4 md:px-8 w-full">
+        <section id="products" className="py-20 bg-gradient-to-b from-white to-gray-50">
+            <div className="container mx-auto px-4 md:px-8 max-w-7xl">
+                {/* Header */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 text-gray-900">Curated Collection</h2>
-                    <p className="text-lg md:text-xl text-gray-600">Experience our products in motion</p>
+                    <h2 className="text-4xl md:text-5xl font-black mb-3 text-gray-900">
+                        Curated Collection
+                    </h2>
+                    <p className="text-lg text-gray-600">
+                        Handpicked products for conscious living
+                    </p>
                 </motion.div>
 
-                <div
-                    className="space-y-6"
-                    onMouseEnter={() => setIsAutoPlaying(false)}
-                    onMouseLeave={() => setIsAutoPlaying(true)}
-                >
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch h-auto md:h-[380px]">
-                        {/* Featured Product */}
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={featuredProduct.name}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: 20 }}
-                                transition={{ duration: 0.5 }}
-                                className="h-[300px] md:h-full"
-                            >
-                                <CardContainer className="inter-var w-full h-full" containerClassName="py-0 h-full">
-                                    <CardBody className="bg-white relative group/card border-black/[0.05] w-full h-full rounded-[2rem] p-6 border transition-all duration-300 hover:shadow-2xl hover:border-emerald-500/20 flex flex-col justify-between overflow-hidden">
-                                        <div className="relative z-10">
-                                            <CardItem
-                                                translateZ="50"
-                                                className="text-2xl font-black text-gray-900 mb-2 tracking-tight"
-                                            >
-                                                {featuredProduct.name}
-                                            </CardItem>
-                                            <CardItem
-                                                as="p"
-                                                translateZ="60"
-                                                className="text-gray-500 text-sm max-w-sm leading-relaxed"
-                                            >
-                                                {featuredProduct.description}
-                                            </CardItem>
-                                        </div>
-
-                                        <CardItem translateZ="80" className="absolute inset-0 w-full h-full">
-                                            <img
-                                                src={featuredProduct.image}
-                                                className="h-full w-full object-cover rounded-[2rem] opacity-20 group-hover:opacity-100 transition-opacity duration-500 scale-110 group-hover:scale-100"
-                                                alt="thumbnail"
-                                                style={{ maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)' }}
-                                            />
-                                        </CardItem>
-
-                                        <div className="flex justify-between items-center mt-auto relative z-10 bg-white/80 backdrop-blur-md p-3 rounded-2xl border border-white/20 shadow-sm">
-                                            <CardItem
-                                                translateZ="20"
-                                                className="flex flex-col px-2"
-                                            >
-                                                <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Price</span>
-                                                <span className="text-2xl font-black text-emerald-700">${featuredProduct.price}</span>
-                                            </CardItem>
-                                            <CardItem
-                                                translateZ="40"
-                                                as="button"
-                                                className="px-6 py-3 rounded-xl bg-gray-900 text-white text-xs font-bold hover:bg-emerald-600 transition-colors shadow-lg flex items-center gap-2"
-                                            >
-                                                Shop Now <FaArrowRight className="w-3 h-3" />
-                                            </CardItem>
-                                        </div>
-                                    </CardBody>
-                                </CardContainer>
-                            </motion.div>
-                        </AnimatePresence>
-
-                        {/* Grid Products */}
-                        <div className="grid grid-cols-2 gap-3 h-[300px] md:h-full">
-                            {gridProducts.map((product, idx) => (
-                                <CardContainer key={product.name} className="inter-var w-full h-full" containerClassName="py-0">
-                                    <CardBody className="bg-white relative group/card border-black/[0.05] w-full h-full rounded-[1.5rem] p-3 border hover:border-emerald-500/20 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 flex flex-col">
-                                        <CardItem translateZ="30" className="w-full h-24 mb-2 overflow-hidden rounded-xl bg-gray-50">
-                                            <img
-                                                src={product.image}
-                                                className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
-                                                alt="thumbnail"
-                                            />
-                                        </CardItem>
-
-                                        <div className="mt-auto">
-                                            <CardItem
-                                                translateZ="40"
-                                                className="text-xs font-bold text-gray-900 truncate"
-                                            >
-                                                {product.name}
-                                            </CardItem>
-                                            <div className="flex justify-between items-center mt-1">
-                                                <CardItem
-                                                    translateZ="20"
-                                                    className="font-bold text-sm text-emerald-600"
-                                                >
-                                                    ${product.price}
-                                                </CardItem>
-                                                <CardItem
-                                                    translateZ="40"
-                                                    className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-gray-900 hover:bg-emerald-600 hover:text-white transition-colors cursor-pointer group/btn shadow-sm"
-                                                >
-                                                    <FaShoppingCart size={10} className="group-hover/btn:scale-110 transition-transform" />
-                                                </CardItem>
-                                            </div>
-                                        </div>
-                                    </CardBody>
-                                </CardContainer>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Progress Indicators */}
-                    <div className="flex justify-center gap-2">
-                        {products.map((_, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setFeaturedIndex(idx)}
-                                className={`h-1.5 rounded-full transition-all duration-300 ${idx === featuredIndex ? 'w-8 bg-emerald-500' : 'w-2 bg-gray-200 hover:bg-gray-300'}`}
+                {/* Asymmetric Grid Layout */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 mb-6">
+                    {/* Large Hero Card - Takes 2 rows, 8 columns */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="lg:col-span-8 lg:row-span-2 group relative overflow-hidden rounded-3xl bg-white shadow-lg hover:shadow-2xl transition-all duration-500"
+                        onMouseEnter={() => setHoveredCard('hero')}
+                        onMouseLeave={() => setHoveredCard(null)}
+                    >
+                        {/* Hero Card Content */}
+                        <div className="relative h-[400px] lg:h-[600px] overflow-hidden">
+                            {/* Product Image */}
+                            <motion.img
+                                src={heroProduct.image}
+                                alt={heroProduct.name}
+                                className="w-full h-full object-cover"
+                                animate={{
+                                    scale: hoveredCard === 'hero' ? 1.1 : 1,
+                                }}
+                                transition={{ duration: 0.6, ease: 'easeOut' }}
                             />
-                        ))}
-                    </div>
+
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+                            {/* Content Overlay */}
+                            <div className="absolute inset-0 p-8 lg:p-12 flex flex-col justify-end">
+                                {/* Category Badge */}
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="mb-4"
+                                >
+                                    <span className="inline-block px-4 py-2 bg-emerald-500/90 backdrop-blur-sm text-white text-xs font-bold uppercase tracking-wider rounded-full">
+                                        Featured
+                                    </span>
+                                </motion.div>
+
+                                {/* Product Name */}
+                                <motion.h3
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                    className="text-3xl lg:text-5xl font-black text-white mb-3 leading-tight"
+                                >
+                                    {heroProduct.name}
+                                </motion.h3>
+
+                                {/* Description */}
+                                <motion.p
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.4 }}
+                                    className="text-white/90 text-base lg:text-lg mb-6 max-w-2xl"
+                                >
+                                    {heroProduct.description}
+                                </motion.p>
+
+                                {/* Price and CTA */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="flex items-center gap-6"
+                                >
+                                    <div className="flex flex-col">
+                                        <span className="text-white/70 text-xs uppercase tracking-widest font-bold">Price</span>
+                                        <span className="text-4xl font-black text-white">${heroProduct.price}</span>
+                                    </div>
+
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-sm hover:bg-emerald-500 hover:text-white transition-colors duration-300 shadow-xl flex items-center gap-2"
+                                    >
+                                        <FaShoppingCart className="w-4 h-4" />
+                                        Add to Cart
+                                    </motion.button>
+                                </motion.div>
+                            </div>
+
+                            {/* Wishlist Button */}
+                            <motion.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                className="absolute top-6 right-6 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 hover:bg-white transition-all duration-300 shadow-lg"
+                            >
+                                <FaHeart className="w-5 h-5" />
+                            </motion.button>
+                        </div>
+                    </motion.div>
+
+                    {/* Small Side Cards - 4 columns, 1 row each */}
+                    {sideProducts.map((product, idx) => (
+                        <motion.div
+                            key={product.name}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 + idx * 0.1 }}
+                            className="lg:col-span-4 group relative overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-xl transition-all duration-300"
+                            onMouseEnter={() => setHoveredCard(`side-${idx}`)}
+                            onMouseLeave={() => setHoveredCard(null)}
+                        >
+                            <div className="relative h-[280px] overflow-hidden">
+                                {/* Product Image */}
+                                <motion.img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover"
+                                    animate={{
+                                        scale: hoveredCard === `side-${idx}` ? 1.15 : 1,
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                />
+
+                                {/* Hover Overlay */}
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{
+                                        opacity: hoveredCard === `side-${idx}` ? 1 : 0,
+                                    }}
+                                    className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
+                                />
+
+                                {/* Content */}
+                                <div className="absolute inset-0 p-5 flex flex-col justify-end">
+                                    <h4 className="text-lg font-bold text-white mb-2 line-clamp-2">
+                                        {product.name}
+                                    </h4>
+
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-2xl font-black text-white">
+                                            ${product.price}
+                                        </span>
+
+                                        <motion.button
+                                            whileHover={{ scale: 1.1, rotate: 5 }}
+                                            whileTap={{ scale: 0.9 }}
+                                            className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white hover:bg-emerald-600 transition-colors shadow-lg"
+                                        >
+                                            <FaShoppingCart className="w-4 h-4" />
+                                        </motion.button>
+                                    </div>
+                                </div>
+
+                                {/* Wishlist Icon */}
+                                <motion.button
+                                    whileHover={{ scale: 1.15 }}
+                                    whileTap={{ scale: 0.85 }}
+                                    className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors shadow-md"
+                                >
+                                    <FaHeart className="w-4 h-4" />
+                                </motion.button>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+
+                {/* Bottom Medium Cards - 3 equal cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                    {bottomProducts.map((product, idx) => (
+                        <motion.div
+                            key={product.name}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: idx * 0.1 }}
+                            whileHover={{ y: -8 }}
+                            className="group relative overflow-hidden rounded-2xl bg-white shadow-md hover:shadow-2xl transition-all duration-300"
+                            onMouseEnter={() => setHoveredCard(`bottom-${idx}`)}
+                            onMouseLeave={() => setHoveredCard(null)}
+                        >
+                            {/* Product Image Container */}
+                            <div className="relative h-[320px] overflow-hidden bg-gray-100">
+                                <motion.img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-full h-full object-cover"
+                                    animate={{
+                                        scale: hoveredCard === `bottom-${idx}` ? 1.1 : 1,
+                                    }}
+                                    transition={{ duration: 0.5 }}
+                                />
+
+                                {/* Quick Add Overlay */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{
+                                        opacity: hoveredCard === `bottom-${idx}` ? 1 : 0,
+                                        y: hoveredCard === `bottom-${idx}` ? 0 : 20,
+                                    }}
+                                    className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/80 to-transparent"
+                                >
+                                    <motion.button
+                                        whileHover={{ scale: 1.05 }}
+                                        whileTap={{ scale: 0.95 }}
+                                        className="w-full py-3 bg-white text-gray-900 rounded-xl font-bold text-sm hover:bg-emerald-500 hover:text-white transition-colors duration-300 flex items-center justify-center gap-2 shadow-lg"
+                                    >
+                                        <FaShoppingCart className="w-4 h-4" />
+                                        Quick Add
+                                    </motion.button>
+                                </motion.div>
+
+                                {/* Wishlist Button */}
+                                <motion.button
+                                    whileHover={{ scale: 1.15 }}
+                                    whileTap={{ scale: 0.85 }}
+                                    className="absolute top-3 right-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-gray-600 hover:text-red-500 transition-colors shadow-md"
+                                >
+                                    <FaHeart className="w-4 h-4" />
+                                </motion.button>
+                            </div>
+
+                            {/* Product Info */}
+                            <div className="p-5">
+                                <h4 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+                                    {product.name}
+                                </h4>
+
+                                {/* Rating */}
+                                <div className="flex items-center gap-1 mb-3">
+                                    {[...Array(5)].map((_, i) => (
+                                        <FaStar key={i} className="w-3 h-3 text-yellow-400 fill-current" />
+                                    ))}
+                                    <span className="text-xs text-gray-500 ml-1">(4.8)</span>
+                                </div>
+
+                                {/* Price */}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-2xl font-black text-emerald-600">
+                                        ${product.price}
+                                    </span>
+                                    <span className="text-xs text-gray-500 line-through">
+                                        ${(parseFloat(product.price) * 1.2).toFixed(2)}
+                                    </span>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>

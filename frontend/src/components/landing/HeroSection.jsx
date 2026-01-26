@@ -31,7 +31,7 @@ const HeroLayout1 = ({ brand }) => {
                             <span className="text-sm font-bold text-emerald-800 uppercase">Sustainable</span>
                         </div>
 
-                        <h1 className="text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-none text-gray-900">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-4 leading-none text-gray-900">
                             {brand?.name?.split(' ')[0]?.toUpperCase() || 'ECO'}
                             <br />
                             <span className="text-emerald-600">
@@ -39,7 +39,7 @@ const HeroLayout1 = ({ brand }) => {
                             </span>
                         </h1>
 
-                        <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-md">
+                        <p className="text-lg md:text-xl text-gray-700 mb-6 max-w-md">
                             {brand?.description || 'Premium sustainable lifestyle products crafted with care for you and the planet.'}
                         </p>
 
@@ -47,7 +47,7 @@ const HeroLayout1 = ({ brand }) => {
                             Shop Now <FaArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
                         </Button>
 
-                        <div className="mt-12 flex gap-8">
+                        <div className="mt-8 flex gap-8">
                             <div>
                                 <div className="text-3xl md:text-4xl font-black text-emerald-600">500+</div>
                                 <div className="text-sm text-gray-600">Products</div>
@@ -122,7 +122,7 @@ const HeroLayout2 = ({ brand }) => {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
-                        className="text-6xl md:text-8xl lg:text-9xl font-black mb-6 leading-none"
+                        className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-none"
                     >
                         <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                             SUSTAINABLE
@@ -135,7 +135,7 @@ const HeroLayout2 = ({ brand }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto"
+                        className="text-xl md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto"
                     >
                         Discover products that make a difference for you and the planet
                     </motion.p>
@@ -154,9 +154,9 @@ const HeroLayout2 = ({ brand }) => {
                 {/* Floating Product Cards */}
                 <div className="absolute inset-0 pointer-events-none hidden lg:block">
                     {[
-                        { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80', x: '10%', y: '20%', delay: 0.8 },
-                        { img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80', x: '80%', y: '30%', delay: 1 },
-                        { img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80', x: '15%', y: '70%', delay: 1.2 },
+                        { img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=80', x: '15%', y: '25%', delay: 0.8 },
+                        { img: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&q=80', x: '75%', y: '35%', delay: 1 },
+                        { img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80', x: '20%', y: '65%', delay: 1.2 },
                     ].map((item, i) => (
                         <motion.div
                             key={i}
@@ -171,7 +171,7 @@ const HeroLayout2 = ({ brand }) => {
                                 delay: item.delay,
                                 y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
                             }}
-                            className="absolute w-48 h-64 rounded-2xl shadow-2xl overflow-hidden"
+                            className="absolute w-40 h-56 rounded-xl shadow-2xl overflow-hidden"
                             style={{ left: item.x, top: item.y }}
                         >
                             <img src={item.img} alt="" className="w-full h-full object-cover" />
@@ -215,7 +215,7 @@ const HeroLayout3 = ({ brand }) => {
                                 <FaLeaf className="w-8 h-8 text-blue-600" />
                             </div>
 
-                            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-4 leading-tight">
                                 <span className="text-gray-900">Design</span>
                                 <br />
                                 <span className="text-gray-900">Meets</span>
@@ -225,11 +225,11 @@ const HeroLayout3 = ({ brand }) => {
                                 </span>
                             </h1>
 
-                            <p className="text-xl text-gray-700 mb-8">
+                            <p className="text-lg text-gray-700 mb-6">
                                 Where style and responsibility converge in perfect harmony
                             </p>
 
-                            <div className="flex flex-col sm:flex-row gap-4 mb-12 justify-center lg:justify-start">
+                            <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center lg:justify-start">
                                 <Button size="lg" className="bg-gradient-to-r from-pink-600 to-purple-600 text-white border-0">
                                     Discover More
                                 </Button>
@@ -238,16 +238,16 @@ const HeroLayout3 = ({ brand }) => {
                                 </Button>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl">
-                                    <FaCheck className="w-6 h-6 text-pink-600 mb-2" />
-                                    <div className="font-bold text-gray-900">100% Organic</div>
-                                    <div className="text-sm text-gray-600">Certified materials</div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="p-4 bg-white/80 backdrop-blur-sm rounded-xl">
+                                    <FaCheck className="w-5 h-5 text-pink-600 mb-2" />
+                                    <div className="font-bold text-gray-900 text-sm">100% Organic</div>
+                                    <div className="text-xs text-gray-600">Certified materials</div>
                                 </div>
-                                <div className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl">
-                                    <FaHeart className="w-6 h-6 text-purple-600 mb-2" />
-                                    <div className="font-bold text-gray-900">Ethically Made</div>
-                                    <div className="text-sm text-gray-600">Fair trade practices</div>
+                                <div className="p-4 bg-white/80 backdrop-blur-sm rounded-xl">
+                                    <FaHeart className="w-5 h-5 text-purple-600 mb-2" />
+                                    <div className="font-bold text-gray-900 text-sm">Ethically Made</div>
+                                    <div className="text-xs text-gray-600">Fair trade practices</div>
                                 </div>
                             </div>
                         </motion.div>
@@ -259,7 +259,7 @@ const HeroLayout3 = ({ brand }) => {
                     style={{ rotate }}
                     className="relative order-1 lg:order-2 opacity-50 lg:opacity-100"
                 >
-                    <div className="absolute inset-0 grid grid-cols-2 gap-4 p-8 lg:p-16">
+                    <div className="absolute inset-0 grid grid-cols-2 gap-4 p-8 lg:p-8">
                         {[
                             'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&q=80',
                             'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80',
@@ -272,7 +272,7 @@ const HeroLayout3 = ({ brand }) => {
                                 animate={{ opacity: 1, scale: 1 }}
                                 transition={{ delay: 0.2 * i, duration: 0.6 }}
                                 whileHover={{ scale: 1.05, zIndex: 10 }}
-                                className="rounded-3xl overflow-hidden shadow-xl"
+                                className="rounded-xl overflow-hidden shadow-xl"
                             >
                                 <img src={img} alt="" className="w-full h-full object-cover" />
                             </motion.div>

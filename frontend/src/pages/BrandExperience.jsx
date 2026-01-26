@@ -16,6 +16,7 @@ const BrandExperience = () => {
         { name: 'Recycled Notebook', price: '18.99', description: '100% post-consumer recycled paper', image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=800&q=80' },
         { name: 'Cotton T-Shirt', price: '39.99', description: 'Organic cotton, ethically made', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&q=80' },
         { name: 'Reusable Water Bottle', price: '29.99', description: 'Stainless steel, keeps drinks cold for 24h', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&q=80' },
+        { name: 'Sustainable Backpack', price: '89.99', description: 'Recycled materials, laptop compartment', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80' },
     ];
 
     if (loading) {
