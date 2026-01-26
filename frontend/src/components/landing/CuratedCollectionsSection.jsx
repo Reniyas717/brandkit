@@ -99,7 +99,7 @@ const CuratedCollectionsSection = ({ products }) => {
                                 >
                                     <div className="flex flex-col">
                                         <span className="text-white/70 text-xs uppercase tracking-widest font-bold">Price</span>
-                                        <span className="text-4xl font-black text-white">${heroProduct.price}</span>
+                                        <span className="text-4xl font-black text-white">₹{heroProduct.price}</span>
                                     </div>
 
                                     <motion.button
@@ -165,7 +165,7 @@ const CuratedCollectionsSection = ({ products }) => {
 
                                     <div className="flex items-center justify-between">
                                         <span className="text-2xl font-black text-white">
-                                            ${product.price}
+                                            ₹{product.price}
                                         </span>
 
                                         <motion.button
@@ -263,10 +263,10 @@ const CuratedCollectionsSection = ({ products }) => {
                                 {/* Price */}
                                 <div className="flex items-center justify-between">
                                     <span className="text-2xl font-black text-emerald-600">
-                                        ${product.price}
+                                        ₹{product.price}
                                     </span>
                                     <span className="text-xs text-gray-500 line-through">
-                                        ${(parseFloat(product.price) * 1.2).toFixed(2)}
+                                        ₹{(parseFloat(product.price) * 1.2).toFixed(2)}
                                     </span>
                                 </div>
                             </div>

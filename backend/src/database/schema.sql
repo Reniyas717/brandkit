@@ -53,6 +53,7 @@ CREATE TABLE products (
   brand_id INTEGER NOT NULL REFERENCES brands(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   description TEXT,
+  category VARCHAR(100),
   price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
   image_url TEXT,
   is_available BOOLEAN DEFAULT true,
