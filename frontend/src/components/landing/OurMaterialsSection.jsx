@@ -1,113 +1,90 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
-import { FaArrowRight } from 'react-icons/fa';
+import { cn } from '../../lib/utils';
 
 const OurMaterialsSection = () => {
-    const items = [
+    const materials = [
         {
             title: 'Organic Cotton',
-            image: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
-            color: 'from-emerald-500 to-teal-600',
-            description: 'Premium organic cotton sourced from certified sustainable farms'
+            description: 'Premium organic cotton sourced from certified sustainable farms. Soft, breathable, and kind to your skin.',
+            staticImage: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=80',
+            hoverGif: 'https://images.unsplash.com/photo-1594211995257-2e11d08e7c10?w=800&q=80', // Close-up Fabric Texture
         },
         {
             title: 'Hemp Fiber',
-            image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=600&q=80',
-            color: 'from-blue-500 to-cyan-600',
-            description: 'Durable & sustainable'
+            description: 'Durable and sustainable hemp fiber that gets softer with every wash. Naturally resistant to mold and UV light.',
+            staticImage: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80',
+            hoverGif: 'https://images.unsplash.com/photo-1518301592542-f6734e5a9591?w=800&q=80', // Natural Fiber Texture
         },
         {
             title: 'Bamboo',
-            image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80',
-            color: 'from-pink-500 to-rose-600',
-            description: 'Fast-growing resource'
+            description: 'Fast-growing renewable resource that requires no pesticides. Incredibly soft and naturally antibacterial.',
+            staticImage: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
+            hoverGif: 'https://images.unsplash.com/photo-1627916535508-3693fb100862?w=800&q=80', // Bamboo Texture
         },
         {
             title: 'Recycled Materials',
-            image: 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&q=80',
-            color: 'from-purple-500 to-indigo-600',
-            description: 'Giving new life to waste materials'
+            description: 'Giving new life to waste materials through innovative recycling processes. Reducing landfill and ocean pollution.',
+            staticImage: 'https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=800&q=80',
+            hoverGif: 'https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=800&q=80', // Recycled Pellets/Texture
         },
     ];
 
     return (
         <section className="py-20 bg-white">
-            <div className="container mx-auto px-8">
+            <div className="container mx-auto px-4 md:px-8">
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    className="text-center mb-16"
+                    className="text-center mb-12"
                 >
-                    <h2 className="text-6xl font-black mb-4">Our Materials</h2>
-                    <p className="text-xl text-gray-600">Sourced responsibly, crafted beautifully</p>
+                    <h2 className="text-4xl md:text-5xl font-black mb-3 text-gray-900">Our Materials</h2>
+                    <p className="text-lg text-gray-600">Sourced responsibly, crafted beautifully</p>
                 </motion.div>
 
-                <div className="grid grid-cols-12 gap-4 auto-rows-[200px]">
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="col-span-12 lg:col-span-8 row-span-2 relative overflow-hidden rounded-2xl group cursor-pointer"
-                    >
-                        <img src={items[0].image} alt={items[0].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className={`absolute inset-0 bg-gradient-to-br ${items[0].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-8 flex flex-col justify-end">
-                            <h3 className="text-3xl md:text-4xl font-black text-white mb-2">{items[0].title}</h3>
-                            <p className="text-white/90 text-sm md:text-base mb-4 max-w-md">{items[0].description}</p>
-                            <Button className="w-fit bg-white text-black hover:bg-gray-100 text-sm h-9 px-4">
-                                Explore <FaArrowRight className="ml-2 w-3 h-3" />
-                            </Button>
-                        </div>
-                    </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {materials.map((material, idx) => (
+                        <motion.div
+                            key={material.title}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="max-w-xs w-full mx-auto"
+                        >
+                            <div
+                                className={cn(
+                                    "group w-full cursor-pointer overflow-hidden relative h-96 rounded-2xl shadow-xl flex flex-col justify-end p-6 border border-gray-100",
+                                    "bg-cover bg-center",
+                                    "hover:after:content-[''] hover:after:absolute hover:after:inset-0 hover:after:bg-black hover:after:opacity-50",
+                                    "transition-all duration-500"
+                                )}
+                                style={{
+                                    backgroundImage: `url(${material.staticImage})`,
+                                }}
+                                onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundImage = `url(${material.hoverGif})`;
+                                }}
+                                onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundImage = `url(${material.staticImage})`;
+                                }}
+                            >
+                                {/* Gradient overlay for text readability */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
-                    >
-                        <img src={items[1].image} alt={items[1].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className={`absolute inset-0 bg-gradient-to-br ${items[1].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                            <h3 className="text-2xl font-black text-white mb-1">{items[1].title}</h3>
-                            <p className="text-white/90 text-xs">{items[1].description}</p>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.2 }}
-                        className="col-span-12 lg:col-span-4 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
-                    >
-                        <img src={items[2].image} alt={items[2].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className={`absolute inset-0 bg-gradient-to-br ${items[2].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                            <h3 className="text-2xl font-black text-white mb-1">{items[2].title}</h3>
-                            <p className="text-white/90 text-xs">{items[2].description}</p>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.3 }}
-                        className="col-span-12 row-span-1 relative overflow-hidden rounded-2xl group cursor-pointer"
-                    >
-                        <img src={items[3].image} alt={items[3].title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                        <div className={`absolute inset-0 bg-gradient-to-r ${items[3].color} mix-blend-multiply opacity-60`} />
-                        <div className="absolute inset-0 px-8 flex items-center">
-                            <div className="max-w-2xl">
-                                <h3 className="text-3xl font-black text-white mb-2">{items[3].title}</h3>
-                                <p className="text-white/90 text-lg">{items[3].description}</p>
+                                {/* Content */}
+                                <div className="relative z-50">
+                                    <h3 className="font-bold text-2xl md:text-3xl text-white mb-3">
+                                        {material.title}
+                                    </h3>
+                                    <p className="font-normal text-sm text-white/90 leading-relaxed">
+                                        {material.description}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </motion.div>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>
