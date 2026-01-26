@@ -385,8 +385,8 @@ const KitReview = () => {
 
                             <div className="space-y-4 mb-6">
                                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
-                                    <span className="text-emerald-100">Items ({getItemCount()})</span>
-                                    <span className="font-bold text-lg">₹{getTotalPrice().toFixed(2)}</span>
+                                    <span className="text-emerald-100">Items ({getItemCount(products)})</span>
+                                    <span className="font-bold text-lg">₹{getTotalPrice(products).toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between items-center pb-4 border-b border-white/20">
                                     <span className="text-emerald-100">Shipping</span>
@@ -394,7 +394,7 @@ const KitReview = () => {
                                 </div>
                                 <div className="flex justify-between items-center text-2xl font-black">
                                     <span>Total</span>
-                                    <span>₹{getTotalPrice().toFixed(2)}</span>
+                                    <span>₹{getTotalPrice(products).toFixed(2)}</span>
                                 </div>
                                 <p className="text-xs text-emerald-100">
                                     Per delivery • Cancel anytime

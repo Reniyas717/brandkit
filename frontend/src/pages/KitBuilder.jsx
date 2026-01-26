@@ -8,7 +8,7 @@ import { Button } from '../components/ui/button';
 import Breadcrumbs from '../components/Breadcrumbs';
 import AIRecommendations from '../components/AIRecommendations';
 import {
-    FaShoppingCart, FaPlus, FaMinus, FaTrash, FaFilter, FaRedo, FaLeaf, FaTimes, FaArrowRight,FaSearch
+    FaShoppingCart, FaPlus, FaMinus, FaTrash, FaFilter, FaRedo, FaLeaf, FaTimes, FaArrowRight, FaSearch
 } from 'react-icons/fa';
 
 const KitBuilder = () => {
@@ -50,7 +50,7 @@ const KitBuilder = () => {
         return matchCategory && matchMaterial;
     });
 
-    const progress = Math.min((getItemCount() / 5) * 100, 100);
+    const progress = Math.min((getItemCount(products) / 5) * 100, 100);
 
     return (
         <div className="min-h-screen bg-gray-50/50">
@@ -68,7 +68,7 @@ const KitBuilder = () => {
                             <div className="hidden md:block w-48">
                                 <div className="flex justify-between text-xs font-medium text-gray-500 mb-1">
                                     <span>Kit Progress</span>
-                                    <span>{getItemCount()}/5 Items</span>
+                                    <span>{getItemCount(products)}/5 Items</span>
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <motion.div
@@ -85,9 +85,9 @@ const KitBuilder = () => {
                             >
                                 <FaShoppingCart className="mr-2" />
                                 Cart
-                                {getItemCount() > 0 && (
+                                {getItemCount(products) > 0 && (
                                     <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center font-bold">
-                                        {getItemCount()}
+                                        {getItemCount(products)}
                                     </span>
                                 )}
                             </Button>
@@ -122,8 +122,8 @@ const KitBuilder = () => {
                                         key={category}
                                         onClick={() => setSelectedCategory(category)}
                                         className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${selectedCategory === category
-                                                ? 'bg-emerald-50 text-emerald-700 font-bold translate-x-1'
-                                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                            ? 'bg-emerald-50 text-emerald-700 font-bold translate-x-1'
+                                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                             }`}
                                     >
                                         {category}
@@ -143,8 +143,8 @@ const KitBuilder = () => {
                                         key={material}
                                         onClick={() => setSelectedMaterial(material)}
                                         className={`px-3 py-1 rounded-full text-xs border transition-all ${selectedMaterial === material
-                                                ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
-                                                : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-200 hover:text-emerald-600'
+                                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-md'
+                                            : 'bg-white text-gray-600 border-gray-200 hover:border-emerald-200 hover:text-emerald-600'
                                             }`}
                                     >
                                         {material}
@@ -348,7 +348,7 @@ const KitBuilder = () => {
                             <div className="p-6 border-t border-gray-100 bg-gray-50">
                                 <div className="flex justify-between items-center mb-4">
                                     <span className="text-gray-600 font-medium">Total</span>
-                                    <span className="text-2xl font-black text-emerald-600">₹{getTotalPrice().toFixed(2)}</span>
+                                    <span className="text-2xl font-black text-emerald-600">₹{getTotalPrice(products).toFixed(2)}</span>
                                 </div>
                                 <Button
                                     onClick={() => navigate('/review')}

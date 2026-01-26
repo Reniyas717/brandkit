@@ -49,14 +49,32 @@ export const useKitStore = create(
             }),
 
             // Computed
-            getItemCount: () => {
+            getItemCount: (products = []) => {
                 const state = get();
-                return state.items.reduce((sum, item) => sum + item.quantity, 0);
+                const hasProducts = products && Array.isArray(products) && products.length > 0;
+
+                return state.items.reduce((sum, item) => {
+                    if (hasProducts) {
+                        const isValid = products.some(p => p.id === item.product_id);
+                        if (!isValid) return sum;
+                    }
+                    return sum + item.quantity;
+                }, 0);
             },
 
-            getTotalPrice: () => {
+            getTotalPrice: (products = []) => {
                 const state = get();
-                return state.items.reduce((sum, item) => sum + (item.price_at_addition * item.quantity), 0);
+                const hasProducts = products && Array.isArray(products) && products.length > 0;
+
+                return state.items.reduce((sum, item) => {
+                    if (hasProducts) {
+                        const product = products.find(p => p.id === item.product_id);
+                        if (!product) return sum; // Skip items not in the current catalog (hidden in UI)
+                        return sum + (product.price * item.quantity);
+                    }
+                    // Fallback to stored price if products not provided or empty
+                    return sum + ((item.price_at_addition || 0) * item.quantity);
+                }, 0);
             },
         }),
         {
