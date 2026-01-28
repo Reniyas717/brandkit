@@ -5,11 +5,34 @@ class ApiClient {
         this.baseURL = baseURL;
     }
 
+    getAuthToken() {
+        // First try direct token (used by AuthContext)
+        const directToken = localStorage.getItem('token');
+        if (directToken) {
+            return directToken;
+        }
+        
+        // Fallback to auth object
+        const authData = localStorage.getItem('auth');
+        if (authData) {
+            try {
+                const parsed = JSON.parse(authData);
+                return parsed.token;
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    }
+
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
+        const token = this.getAuthToken();
+        
         const config = {
             headers: {
                 'Content-Type': 'application/json',
+                ...(token && { Authorization: `Bearer ${token}` }),
                 ...options.headers,
             },
             ...options,
@@ -20,7 +43,9 @@ class ApiClient {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message || 'API request failed');
+                const error = new Error(data.message || 'API request failed');
+                error.response = { status: response.status, data };
+                throw error;
             }
 
             return data;
@@ -31,8 +56,23 @@ class ApiClient {
     }
 
     // GET request
-    async get(endpoint, params = {}) {
-        const queryString = new URLSearchParams(params).toString();
+    async get(endpoint, options = {}) {
+        // Support both { params: {...} } and direct params object
+        const params = options.params || options;
+        const filteredParams = {};
+        
+        // Filter out non-serializable params and flatten
+        if (params && typeof params === 'object') {
+            Object.entries(params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null && key !== 'params') {
+                    filteredParams[key] = value;
+                }
+            });
+        }
+        
+        const queryString = Object.keys(filteredParams).length > 0 
+            ? new URLSearchParams(filteredParams).toString() 
+            : '';
         const url = queryString ? `${endpoint}?${queryString}` : endpoint;
         return this.request(url, { method: 'GET' });
     }

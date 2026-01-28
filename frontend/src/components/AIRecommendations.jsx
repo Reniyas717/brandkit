@@ -9,8 +9,10 @@ const AIRecommendations = ({ products, onAddProduct, currentItems }) => {
     const [impactMessage, setImpactMessage] = useState('');
 
     useEffect(() => {
-        loadRecommendations();
-    }, []);
+        if (products && products.length > 0) {
+            loadRecommendations();
+        }
+    }, [products]);
 
     useEffect(() => {
         if (currentItems.length > 0) {
@@ -19,24 +21,33 @@ const AIRecommendations = ({ products, onAddProduct, currentItems }) => {
     }, [currentItems]);
 
     const loadRecommendations = async () => {
+        if (!products || products.length === 0) return;
+        
         setLoading(true);
         try {
+            // Pass actual products to the service
             const result = await aiRecommendationService.getKitRecommendations({
                 lifestyle: 'sustainable living',
                 budget: 'moderate',
                 priorities: 'reducing plastic waste'
-            });
+            }, products);
 
-            if (result.success && result.recommendations) {
+            if (result.success && result.recommendations && result.recommendations.length > 0) {
+                // Recommendations are now actual product IDs from our database
                 const recommendedProducts = result.recommendations
                     .map(id => products.find(p => p.id === id))
                     .filter(Boolean)
                     .slice(0, 3);
 
                 setRecommendations(recommendedProducts);
+            } else {
+                // Fallback: show first 3 products as recommendations
+                setRecommendations(products.slice(0, 3));
             }
         } catch (error) {
             console.error('Failed to load recommendations:', error);
+            // Fallback: show first 3 products
+            setRecommendations(products.slice(0, 3));
         } finally {
             setLoading(false);
         }
@@ -89,11 +100,11 @@ const AIRecommendations = ({ products, onAddProduct, currentItems }) => {
                         >
                             <div className="aspect-square rounded-lg overflow-hidden mb-2 bg-gray-100">
                                 <img
-                                    src={product.image}
+                                    src={product.image_url || product.image}
                                     alt={product.name}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                     onError={(e) => {
-                                        e.target.src = 'https://via.placeholder.com/400/10b981/ffffff?text=Product';
+                                        e.target.src = 'https://placehold.co/400x400/10b981/ffffff?text=Eco+Product';
                                     }}
                                 />
                             </div>

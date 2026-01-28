@@ -1,179 +1,179 @@
 const SubscriptionKit = require('../models/SubscriptionKit');
 const Product = require('../models/Product');
-const DeliveryFrequency = require('../models/DeliveryFrequency');
-const { asyncHandler } = require('../middleware/errorHandler');
 const { AppError } = require('../middleware/errorHandler');
 
-exports.initializeKit = asyncHandler(async (req, res) => {
-    const userId = req.body.userId || 1; // TODO: Get from auth middleware
-
-    // Check if user already has a draft kit
-    let kit = await SubscriptionKit.findDraftByUser(userId);
-
-    if (!kit) {
-        kit = await SubscriptionKit.create(userId);
+// Get all kits
+const getAllKits = async (req, res, next) => {
+    try {
+        const kits = await SubscriptionKit.findAll();
+        res.json(kits);
+    } catch (error) {
+        next(error);
     }
+};
 
-    res.status(200).json({
-        status: 'success',
-        data: { kit },
-    });
-});
-
-exports.addProductToKit = asyncHandler(async (req, res, next) => {
-    const { kitId } = req.params;
-    const { productId, quantity = 1 } = req.body;
-
-    // Verify kit exists and is in draft status
-    const kit = await SubscriptionKit.findById(kitId);
-    if (!kit) {
-        return next(new AppError('Kit not found', 404));
+// Get kit by ID
+const getKitById = async (req, res, next) => {
+    try {
+        const kit = await SubscriptionKit.findById(req.params.id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
+        res.json(kit);
+    } catch (error) {
+        next(error);
     }
-    if (kit.status !== 'draft') {
-        return next(new AppError('Cannot modify confirmed kit', 400));
+};
+
+// Create new kit
+const createKit = async (req, res, next) => {
+    try {
+        const userId = req.user?.id || null;
+        const kit = await SubscriptionKit.create({
+            user_id: userId,
+            status: 'draft'
+        });
+        res.status(201).json(kit);
+    } catch (error) {
+        next(error);
     }
+};
 
-    // Verify product exists and get price
-    const product = await Product.findById(productId);
-    if (!product) {
-        return next(new AppError('Product not found', 404));
+// Add item to kit
+const addItemToKit = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { product_id, quantity = 1 } = req.body;
+
+        // Verify kit exists
+        const kit = await SubscriptionKit.findById(id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
+
+        // Get product details for price
+        const product = await Product.findById(product_id);
+        if (!product) {
+            throw new AppError('Product not found', 404);
+        }
+
+        const item = await SubscriptionKit.addItem(id, {
+            product_id,
+            quantity,
+            price_at_addition: product.price
+        });
+
+        res.status(201).json(item);
+    } catch (error) {
+        next(error);
     }
-    if (!product.is_available) {
-        return next(new AppError('Product is not available', 400));
+};
+
+// Remove item from kit
+const removeItemFromKit = async (req, res, next) => {
+    try {
+        const { id, itemId } = req.params;
+
+        // Verify kit exists
+        const kit = await SubscriptionKit.findById(id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
+
+        await SubscriptionKit.removeItem(id, itemId);
+        res.json({ message: 'Item removed successfully' });
+    } catch (error) {
+        next(error);
     }
+};
 
-    // Add item to kit
-    const item = await SubscriptionKit.addItem(kitId, productId, quantity, product.price);
+// Update item quantity
+const updateItemQuantity = async (req, res, next) => {
+    try {
+        const { id, itemId } = req.params;
+        const { quantity } = req.body;
 
-    res.status(200).json({
-        status: 'success',
-        data: { item },
-    });
-});
+        // Verify kit exists
+        const kit = await SubscriptionKit.findById(id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
 
-exports.updateKitItemQuantity = asyncHandler(async (req, res, next) => {
-    const { kitId, productId } = req.params;
-    const { quantity } = req.body;
-
-    if (!quantity || quantity < 1) {
-        return next(new AppError('Quantity must be at least 1', 400));
+        const item = await SubscriptionKit.updateItemQuantity(id, itemId, quantity);
+        res.json(item);
+    } catch (error) {
+        next(error);
     }
+};
 
-    // Verify kit is in draft status
-    const kit = await SubscriptionKit.findById(kitId);
-    if (!kit) {
-        return next(new AppError('Kit not found', 404));
+// Set delivery frequency
+const setDeliveryFrequency = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { frequency_id } = req.body;
+
+        // Verify kit exists
+        const kit = await SubscriptionKit.findById(id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
+
+        const updatedKit = await SubscriptionKit.setFrequency(id, frequency_id);
+        res.json(updatedKit);
+    } catch (error) {
+        next(error);
     }
-    if (kit.status !== 'draft') {
-        return next(new AppError('Cannot modify confirmed kit', 400));
+};
+
+// Confirm kit subscription
+const confirmKit = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user?.id;
+
+        // Verify kit exists
+        const kit = await SubscriptionKit.findById(id);
+        if (!kit) {
+            throw new AppError('Kit not found', 404);
+        }
+
+        // Check if kit has items
+        if (!kit.items || kit.items.length === 0) {
+            throw new AppError('Cannot confirm an empty kit', 400);
+        }
+
+        const confirmedKit = await SubscriptionKit.confirm(id, userId);
+        res.json(confirmedKit);
+    } catch (error) {
+        next(error);
     }
+};
 
-    const item = await SubscriptionKit.updateItemQuantity(kitId, productId, quantity);
+// Get user's subscriptions
+const getUserSubscriptions = async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        
+        if (!userId) {
+            throw new AppError('User not authenticated', 401);
+        }
 
-    res.status(200).json({
-        status: 'success',
-        data: { item },
-    });
-});
-
-exports.removeKitItem = asyncHandler(async (req, res, next) => {
-    const { kitId, productId } = req.params;
-
-    // Verify kit is in draft status
-    const kit = await SubscriptionKit.findById(kitId);
-    if (!kit) {
-        return next(new AppError('Kit not found', 404));
+        const subscriptions = await SubscriptionKit.findAllByUser(userId);
+        res.json(subscriptions || []);
+    } catch (error) {
+        console.error('Error in getUserSubscriptions:', error);
+        next(error);
     }
-    if (kit.status !== 'draft') {
-        return next(new AppError('Cannot modify confirmed kit', 400));
-    }
+};
 
-    await SubscriptionKit.removeItem(kitId, productId);
-
-    res.status(204).json({
-        status: 'success',
-        data: null,
-    });
-});
-
-exports.setDeliveryFrequency = asyncHandler(async (req, res, next) => {
-    const { kitId } = req.params;
-    const { frequencyId } = req.body;
-
-    // Verify kit is in draft status
-    const kit = await SubscriptionKit.findById(kitId);
-    if (!kit) {
-        return next(new AppError('Kit not found', 404));
-    }
-    if (kit.status !== 'draft') {
-        return next(new AppError('Cannot modify confirmed kit', 400));
-    }
-
-    // Verify frequency exists
-    const frequency = await DeliveryFrequency.findById(frequencyId);
-    if (!frequency) {
-        return next(new AppError('Delivery frequency not found', 404));
-    }
-
-    const updatedKit = await SubscriptionKit.setDeliveryFrequency(kitId, frequencyId);
-
-    res.status(200).json({
-        status: 'success',
-        data: { kit: updatedKit },
-    });
-});
-
-exports.getKitSummary = asyncHandler(async (req, res, next) => {
-    const { kitId } = req.params;
-
-    const summary = await SubscriptionKit.getSummary(kitId);
-    if (!summary) {
-        return next(new AppError('Kit not found', 404));
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: { kit: summary },
-    });
-});
-
-exports.confirmKit = asyncHandler(async (req, res, next) => {
-    const { kitId } = req.params;
-
-    // Verify kit exists and is in draft status
-    const kit = await SubscriptionKit.findById(kitId);
-    if (!kit) {
-        return next(new AppError('Kit not found', 404));
-    }
-    if (kit.status !== 'draft') {
-        return next(new AppError('Kit is already confirmed', 400));
-    }
-
-    // Verify kit has items
-    const items = await SubscriptionKit.getItems(kitId);
-    if (items.length === 0) {
-        return next(new AppError('Cannot confirm empty kit', 400));
-    }
-
-    // Verify delivery frequency is set
-    if (!kit.delivery_frequency_id) {
-        return next(new AppError('Delivery frequency must be set before confirmation', 400));
-    }
-
-    const confirmedKit = await SubscriptionKit.confirm(kitId);
-
-    res.status(200).json({
-        status: 'success',
-        data: { kit: confirmedKit },
-    });
-});
-
-exports.getDeliveryFrequencies = asyncHandler(async (req, res) => {
-    const frequencies = await DeliveryFrequency.findAll();
-
-    res.status(200).json({
-        status: 'success',
-        results: frequencies.length,
-        data: { frequencies },
-    });
-});
+module.exports = {
+    getAllKits,
+    getKitById,
+    createKit,
+    addItemToKit,
+    removeItemFromKit,
+    updateItemQuantity,
+    setDeliveryFrequency,
+    confirmKit,
+    getUserSubscriptions
+};

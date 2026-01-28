@@ -5,13 +5,48 @@ const groq = new Groq({
     dangerouslyAllowBrowser: true // Note: In production, use backend proxy
 });
 
+// Map of product names for matching AI responses (handles partial matches)
+const productNamePatterns = [
+    { pattern: /tote/i, fallback: 'Tote' },
+    { pattern: /utensil|bamboo.*set/i, fallback: 'Utensil' },
+    { pattern: /notebook/i, fallback: 'Notebook' },
+    { pattern: /t-shirt|tee/i, fallback: 'Tee' },
+    { pattern: /water.*bottle|bottle/i, fallback: 'Bottle' },
+    { pattern: /backpack/i, fallback: 'Backpack' },
+    { pattern: /lunch.*box|tiffin/i, fallback: 'Lunch' },
+    { pattern: /pen.*set|pen/i, fallback: 'Pen' },
+    { pattern: /hoodie/i, fallback: 'Hoodie' },
+    { pattern: /mug|coffee/i, fallback: 'Mug' },
+    { pattern: /shopping.*bag|jute/i, fallback: 'Bag' },
+    { pattern: /cutting.*board/i, fallback: 'Cutting' },
+    { pattern: /pencil/i, fallback: 'Pencil' },
+    { pattern: /sock/i, fallback: 'Sock' },
+    { pattern: /glass/i, fallback: 'Glass' },
+];
+
 export const aiRecommendationService = {
     /**
      * Get personalized kit recommendations based on user preferences
+     * @param {Object} userPreferences - User preferences
+     * @param {Array} availableProducts - Products from the database to match against
      */
-    getKitRecommendations: async (userPreferences = {}) => {
+    getKitRecommendations: async (userPreferences = {}, availableProducts = []) => {
         try {
             const { lifestyle, budget, priorities } = userPreferences;
+
+            // Build product list from available products
+            const productList = availableProducts.length > 0
+                ? availableProducts.map((p, i) => `${i + 1}. ${p.name} (₹${p.price}) - ${p.category}`).join('\n')
+                : `1. Organic Hemp Tote (₹2499) - Bags
+2. Bamboo Utensil Set (₹1299) - Kitchen
+3. Recycled Paper Notebook (₹599) - Stationery
+4. Organic Cotton Tee (₹1299) - Apparel
+5. Insulated Steel Bottle (₹1999) - Drinkware
+6. Ocean Plastic Backpack (₹4999) - Bags
+7. Wheat Straw Containers (₹899) - Kitchen
+8. Stone Paper Notebook (₹799) - Stationery
+9. Hemp Blend Hoodie (₹2999) - Apparel
+10. Copper Water Bottle (₹1799) - Drinkware`;
 
             const prompt = `You are an eco-friendly product recommendation expert. Based on the following user preferences, recommend 3-5 sustainable products for their eco kit:
 
@@ -20,23 +55,9 @@ Budget: ${budget || 'moderate'}
 Priorities: ${priorities || 'reducing plastic waste, carbon footprint'}
 
 Available products:
-1. Organic Tote Bag (₹3999) - Bags
-2. Bamboo Utensil Set (₹1999) - Kitchen
-3. Recycled Notebook (₹1519) - Stationery
-4. Cotton T-Shirt (₹3199) - Apparel
-5. Reusable Water Bottle (₹2799) - Drinkware
-6. Hemp Backpack (₹7199) - Bags
-7. Stainless Steel Lunch Box (₹2499) - Kitchen
-8. Bamboo Pen Set (₹799) - Stationery
-9. Hemp Hoodie (₹4999) - Apparel
-10. Bamboo Coffee Mug (₹1299) - Drinkware
-11. Jute Shopping Bag (₹1999) - Bags
-12. Bamboo Cutting Board (₹1599) - Kitchen
-13. Plantable Pencils (₹599) - Stationery
-14. Bamboo Socks (₹899) - Apparel
-15. Glass Water Bottle (₹1999) - Drinkware
+${productList}
 
-Respond with ONLY a JSON array of product IDs (1-15) in order of recommendation. Example: [5, 2, 1]`;
+Respond with ONLY a JSON array of the product numbers (1-based index) in order of recommendation. Example: [5, 2, 1]`;
 
             const completion = await groq.chat.completions.create({
                 messages: [
@@ -55,19 +76,34 @@ Respond with ONLY a JSON array of product IDs (1-15) in order of recommendation.
             });
 
             const response = completion.choices[0]?.message?.content || '[]';
-            const recommendedIds = JSON.parse(response.trim());
+            const cleanResponse = response.replace(/```json\n?|\n?```/g, '').trim();
+            const recommendedIndices = JSON.parse(cleanResponse);
 
+            // If we have available products, use indices to get actual product IDs
+            if (availableProducts.length > 0) {
+                const recommendedIds = recommendedIndices
+                    .map(idx => availableProducts[idx - 1]?.id)
+                    .filter(Boolean);
+                
+                return {
+                    success: true,
+                    recommendations: recommendedIds,
+                    reasoning: 'AI-powered recommendations based on your preferences'
+                };
+            }
+
+            // Fallback: return indices for legacy matching
             return {
                 success: true,
-                recommendations: recommendedIds,
+                recommendations: recommendedIndices,
                 reasoning: 'AI-powered recommendations based on your preferences'
             };
         } catch (error) {
             console.error('AI Recommendation Error:', error);
-            // Fallback recommendations (IDs from local data)
+            // Fallback: return first 3 products if available
             return {
                 success: false,
-                recommendations: [5, 2, 1],
+                recommendations: [],
                 reasoning: 'Default eco-starter kit recommendations'
             };
         }

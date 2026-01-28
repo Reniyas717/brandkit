@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { useKitStore } from '../store/kitStore';
 import { useKit } from '../hooks/useKit';
 import { useProducts } from '../hooks/useProducts';
-import { kitService } from '../services';
+import { useAuth } from '../context/AuthContext';
+import { kitService, frequencyService } from '../services';
 import { Button } from '../components/ui/button';
 import Breadcrumbs from '../components/Breadcrumbs';
 import {
     FaCheck, FaArrowLeft, FaBox, FaTruck, FaCalendar, FaEdit,
-    FaLeaf, FaRecycle, FaWater, FaTree, FaStar
+    FaLeaf, FaRecycle, FaWater, FaTree, FaStar, FaHome, FaPlus
 } from 'react-icons/fa';
 
 // Impact Metric Card
@@ -44,8 +45,8 @@ const FrequencyCard = ({ freq, isSelected, onClick }) => (
             </motion.div>
         )}
         <FaCalendar className={`w-8 h-8 mb-3 ${isSelected ? 'text-emerald-600' : 'text-gray-400'}`} />
-        <div className="font-black text-lg text-gray-900">{freq.label}</div>
-        <div className="text-sm text-gray-600 mt-1">Every {freq.interval_in_days} days</div>
+        <div className="font-black text-lg text-gray-900">{freq.name || freq.label}</div>
+        <div className="text-sm text-gray-600 mt-1">Every {freq.days || freq.interval_in_days} days</div>
         {isSelected && (
             <div className="mt-3 text-xs text-emerald-600 font-bold">
                 ✓ Selected
@@ -56,9 +57,12 @@ const FrequencyCard = ({ freq, isSelected, onClick }) => (
 
 const KitReview = () => {
     const navigate = useNavigate();
+    const { slug } = useParams(); // Get slug (optional)
+    const { isAuthenticated } = useAuth();
     const { items, deliveryFrequency, getTotalPrice, getItemCount, clearKit } = useKitStore();
     const { setFrequency, confirmKit } = useKit();
-    const { products } = useProducts();
+    // Fetch all products for cross-brand kit review
+    const { products } = useProducts(null);
     const [frequencies, setFrequencies] = useState([]);
     const [selectedFrequency, setSelectedFrequency] = useState(deliveryFrequency);
     const [isConfirming, setIsConfirming] = useState(false);
@@ -121,29 +125,37 @@ const KitReview = () => {
     useEffect(() => {
         const loadFrequencies = async () => {
             try {
-                const response = await kitService.getDeliveryFrequencies();
-                setFrequencies(response.data.frequencies);
-                if (!selectedFrequency && response.data.frequencies.length > 0) {
-                    setSelectedFrequency(response.data.frequencies[0].id);
+                const freqData = await frequencyService.getAll();
+                // freqData should already be an array thanks to service fix
+                const frequencies = Array.isArray(freqData) ? freqData : [];
+                setFrequencies(frequencies);
+                if (!selectedFrequency && frequencies.length > 0) {
+                    setSelectedFrequency(frequencies[0].id);
                 }
             } catch (error) {
                 console.error('Failed to load frequencies:', error);
                 // Fallback frequencies
                 setFrequencies([
-                    { id: 1, label: 'Weekly', interval_in_days: 7 },
-                    { id: 2, label: 'Bi-Weekly', interval_in_days: 14 },
-                    { id: 3, label: 'Monthly', interval_in_days: 30 },
-                    { id: 4, label: 'Quarterly', interval_in_days: 90 }
+                    { id: 1, name: 'Weekly', days: 7 },
+                    { id: 2, name: 'Bi-Weekly', days: 14 },
+                    { id: 3, name: 'Monthly', days: 30 },
+                    { id: 4, name: 'Quarterly', days: 90 }
                 ]);
                 if (!selectedFrequency) setSelectedFrequency(1);
             }
         };
         loadFrequencies();
-    }, [selectedFrequency]);
+    }, []);
 
     const handleConfirm = async () => {
         if (!selectedFrequency) {
             alert('Please select a delivery frequency');
+            return;
+        }
+
+        if (!isAuthenticated) {
+            alert('Please sign in to confirm your subscription');
+            navigate('/auth/login');
             return;
         }
 
@@ -153,13 +165,12 @@ const KitReview = () => {
             const success = await confirmKit();
             if (success) {
                 setShowSuccess(true);
-                setTimeout(() => {
-                    clearKit();
-                    navigate('/');
-                }, 3000);
+            } else {
+                alert('Failed to confirm subscription. Please try again.');
             }
         } catch (error) {
             console.error('Failed to confirm kit:', error);
+            alert('Failed to confirm subscription: ' + (error.message || 'Unknown error'));
         } finally {
             setIsConfirming(false);
         }
@@ -190,7 +201,7 @@ const KitReview = () => {
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="text-center"
+                    className="text-center max-w-md mx-auto px-6"
                 >
                     <motion.div
                         initial={{ scale: 0 }}
@@ -204,9 +215,21 @@ const KitReview = () => {
                         Kit Confirmed!
                     </h2>
                     <p className="text-xl text-gray-600 mb-4">Your sustainable journey begins now</p>
-                    <div className="flex items-center justify-center gap-2 text-emerald-600">
+                    <div className="flex items-center justify-center gap-2 text-emerald-600 mb-8">
                         <FaLeaf className="animate-bounce" />
                         <span className="text-sm font-medium">Making the world greener, one kit at a time</span>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <Link to="/subscriptions">
+                            <Button className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 px-6">
+                                <FaTruck className="mr-2" /> Track Subscription
+                            </Button>
+                        </Link>
+                        <Link to="/builder">
+                            <Button variant="outline" className="w-full sm:w-auto">
+                                Build Another Kit
+                            </Button>
+                        </Link>
                     </div>
                 </motion.div>
             </div>
@@ -222,7 +245,7 @@ const KitReview = () => {
                 </div>
                 <div className="container mx-auto px-8 py-8">
                     <button
-                        onClick={() => navigate('/builder')}
+                        onClick={() => navigate(slug ? `/brand/${slug}/builder` : '/builder')}
                         className="flex items-center text-gray-600 hover:text-gray-900 mb-4 transition-colors group"
                     >
                         <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform" />
@@ -297,7 +320,7 @@ const KitReview = () => {
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-2xl font-black text-gray-900">Your Items</h2>
                                 <button
-                                    onClick={() => navigate('/builder')}
+                                    onClick={() => navigate(slug ? `/brand/${slug}/builder` : '/builder')}
                                     className="flex items-center text-emerald-600 hover:text-emerald-700 font-bold transition-colors group"
                                 >
                                     <FaEdit className="mr-2 group-hover:rotate-12 transition-transform" />
@@ -307,40 +330,50 @@ const KitReview = () => {
 
                             <div className="space-y-4">
                                 {items.map((item, idx) => {
-                                    const product = products.find(p => p.id === item.product_id);
-                                    if (!product) return null;
+                                    // Try to find product in current catalog, fall back to stored item data
+                                    const product = products.find(p => p.id === item.product_id || p.id === item.id);
+                                    const displayName = product?.name || item.name || 'Product';
+                                    const displayImage = product?.image_url || product?.image || item.image_url || item.image || 'https://placehold.co/100x100/png?text=Product';
+                                    const displayPrice = parseFloat(product?.price || item.price_at_addition || item.price || 0);
+                                    const sustainabilityScore = product?.sustainability_score || item.sustainability_score;
 
                                     return (
                                         <motion.div
-                                            key={item.product_id}
+                                            key={item.product_id || item.id || idx}
                                             initial={{ opacity: 0, x: -20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: idx * 0.1 }}
                                             className="flex items-center gap-4 p-4 bg-gradient-to-br from-gray-50 to-emerald-50/30 rounded-2xl border border-gray-100"
                                         >
                                             <img
-                                                src={product.image}
-                                                alt={product.name}
+                                                src={displayImage}
+                                                alt={displayName}
                                                 className="w-24 h-24 rounded-xl object-cover shadow-md"
+                                                onError={(e) => {
+                                                    e.target.src = 'https://placehold.co/100x100/png?text=Product';
+                                                }}
                                             />
                                             <div className="flex-grow">
-                                                <h3 className="font-bold text-gray-900 text-lg">{product.name}</h3>
+                                                <h3 className="font-bold text-gray-900 text-lg">{displayName}</h3>
+                                                {(item.brand_name || product?.brand_name) && (
+                                                    <p className="text-xs text-emerald-600 font-medium">from {item.brand_name || product?.brand_name}</p>
+                                                )}
                                                 <p className="text-sm text-gray-600 mt-1">Quantity: {item.quantity}</p>
-                                                {product.sustainability_score && (
+                                                {sustainabilityScore && (
                                                     <div className="flex items-center gap-2 mt-2">
                                                         <FaStar className="w-3 h-3 text-emerald-600" />
                                                         <span className="text-xs text-emerald-600 font-bold">
-                                                            {product.sustainability_score}% Eco Score
+                                                            {sustainabilityScore}% Eco Score
                                                         </span>
                                                     </div>
                                                 )}
                                             </div>
                                             <div className="text-right">
                                                 <div className="text-2xl font-black text-emerald-600">
-                                                    ₹{(product.price * item.quantity).toFixed(2)}
+                                                    ₹{(displayPrice * item.quantity).toFixed(2)}
                                                 </div>
                                                 <div className="text-xs text-gray-500">
-                                                    ₹{product.price} each
+                                                    ₹{displayPrice} each
                                                 </div>
                                             </div>
                                         </motion.div>
