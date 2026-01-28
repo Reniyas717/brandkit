@@ -53,7 +53,7 @@
 @layer base {
     body {
         font-family: var(--font-family-poppins);
-        @apply antialiased text-gray-900 bg-white;
+        @apply antialiased text-neutral-900 bg-white;
     }
 
     h1,
@@ -65,10 +65,15 @@
         font-family: var(--font-family-outfit);
         @apply font-bold;
     }
-
-    /* Smooth transitions */
-    * {
-        @apply transition-colors duration-200;
+    
+    /* Smooth scroll */
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    /* Selection color */
+    ::selection {
+        @apply bg-emerald-500/30;
     }
 }
 
@@ -99,4 +104,100 @@
     .text-ocean {
         color: var(--color-ocean-600);
     }
+}
+
+/* Aceternity UI Animations */
+@keyframes scroll {
+    to {
+        transform: translate(calc(-50% - 0.5rem));
+    }
+}
+
+@keyframes spotlight {
+    0% {
+        opacity: 0;
+        transform: translate(-72%, -62%) scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -40%) scale(1);
+    }
+}
+
+@keyframes shimmer {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+
+@keyframes border-beam {
+    100% {
+        offset-distance: 100%;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.animate-scroll {
+    animation: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
+}
+
+.animate-spotlight {
+    animation: spotlight 2s ease .75s 1 forwards;
+}
+
+.animate-shimmer {
+    animation: shimmer 2s linear infinite;
+}
+
+.animate-gradient {
+    background-size: 300% 300%;
+    animation: gradient 8s ease infinite;
+}
+
+/* Glass morphism */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Text gradient effect */
+.text-gradient {
+    background: linear-gradient(to right, #10b981, #06b6d4, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Glow effects */
+.glow {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+.glow-lg {
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+}
+
+/* Noise texture overlay */
+.noise::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.05;
+    pointer-events: none;
 }

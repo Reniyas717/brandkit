@@ -1,590 +1,875 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useAuth } from '../context/AuthContext';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { brandService } from '../services';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import { 
-    FiArrowRight, FiShield, FiTrendingUp, FiGlobe, 
-    FiHeart, FiStar, FiLogOut, FiSettings, FiShoppingBag,
-     FiDroplet, FiBox, FiUsers
+  FiArrowRight, FiBox, FiShield, FiGlobe, FiStar, FiCheck, 
+  FiTrendingUp, FiZap, FiPlay, FiAward, FiPackage, FiArrowUpRight,
+  FiTarget, FiLayers
 } from 'react-icons/fi';
-import { RiLeafLine } from 'react-icons/ri'; // <-- Correct import
+import { RiLeafLine, RiSparklingLine } from 'react-icons/ri';
 
+// Product images for hero
+const heroImages = [
+  'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=500&fit=crop', // Skincare
+  'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=500&fit=crop', // Natural products
+  'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=400&h=500&fit=crop', // Eco packaging
+  'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?w=400&h=500&fit=crop', // Sustainable goods
+];
 
-const PlatformHome = () => {
-    const { user, isAuthenticated, logout } = useAuth();
-    const navigate = useNavigate();
-    const [brands, setBrands] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [hoveredBrand, setHoveredBrand] = useState(null);
+// ============================================
+// HERO SECTION - With Product Images
+// ============================================
+const HeroSection = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], [0, 150]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
-    useEffect(() => {
-        const fetchBrands = async () => {
-            try {
-                const brandsData = await brandService.getAllBrands();
-                // brandService.getAllBrands now returns array directly
-                setBrands(Array.isArray(brandsData) ? brandsData : []);
-            } catch (error) {
-                console.error('Error fetching brands:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchBrands();
-    }, []);
+  return (
+    <section ref={ref} className="relative min-h-screen overflow-hidden bg-[#fafaf9]">
+      {/* Subtle background texture */}
+      <div className="absolute inset-0 opacity-40">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.03) 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+      </div>
 
-    const handleLogout = () => {
-        logout();
-        navigate('/');
-    };
+      {/* Gradient accents */}
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-emerald-50/80 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-teal-100/50 to-transparent rounded-full blur-3xl" />
 
-    const impactStats = [
-        { icon: RiLeafLine  , label: 'Trees Planted', value: '10,000+', color: 'emerald' },
-        { icon: FiDroplet, label: 'Plastic Reduced', value: '5 Tons', color: 'blue' },
-        { icon: FiUsers, label: 'Happy Customers', value: '25k+', color: 'purple' },
-        { icon: FiShield, label: 'Ethical Brands', value: '50+', color: 'amber' }
-    ];
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 min-h-screen flex items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center w-full">
+          {/* Left Content */}
+          <motion.div style={{ opacity }} className="max-w-xl">
+            {/* Badge */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-emerald-100 shadow-sm text-sm font-medium text-emerald-700 mb-8"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              Trusted by 50,000+ conscious consumers
+            </motion.div>
 
-    const features = [
-        { 
-            icon: FiBox, 
-            title: 'Curated Kits', 
-            description: 'Build your perfect sustainable kit from multiple brands' 
-        },
-        { 
-            icon: FiShield, 
-            title: 'Verified Brands', 
-            description: 'Every brand is vetted for quality and sustainability' 
-        },
-        { 
-            icon: FiGlobe, 
-            title: 'Carbon Neutral', 
-            description: '100% carbon offset on all deliveries' 
-        },
-        { 
-            icon: FiHeart, 
-            title: 'Impact Driven', 
-            description: 'Your purchase plants trees and supports communities' 
-        }
-    ];
+            {/* Headline */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.05] tracking-tight text-neutral-900"
+            >
+              Curate Your
+              <span className="relative block mt-2">
+                <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 bg-clip-text text-transparent">
+                  Sustainable
+                </span>
+              </span>
+              Lifestyle
+            </motion.h1>
 
-    return (
-        <div className="min-h-screen bg-white">
-            {/* Navigation */}
-            <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                        <Link to="/" className="text-2xl font-bold text-gray-900">
-                            Brand<span className="text-emerald-500">Kit</span>
-                        </Link>
-                        
-                        <div className="hidden md:flex items-center gap-8">
-                            <a href="#about" className="text-gray-600 hover:text-emerald-600 transition-colors text-sm font-medium">About</a>
-                            <a href="#brands" className="text-gray-600 hover:text-emerald-600 transition-colors text-sm font-medium">Brands</a>
-                            <a href="#impact" className="text-gray-600 hover:text-emerald-600 transition-colors text-sm font-medium">Impact</a>
-                        </div>
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-6 text-lg text-neutral-600 leading-relaxed"
+            >
+              Build personalized subscription boxes from verified ethical brands. 
+              Every purchase supports regenerative practices and plants trees worldwide.
+            </motion.p>
 
-                        <div className="flex items-center gap-3">
-                            {isAuthenticated ? (
-                                <>
-                                    <span className="hidden sm:block text-sm text-gray-500">
-                                        Hi, <span className="font-semibold text-gray-900">{user?.name?.split(' ')[0]}</span>
-                                    </span>
-                                    <Link to="/subscriptions" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors">
-                                        <FiBox className="w-4 h-4" />
-                                        <span className="hidden sm:inline">My Kits</span>
-                                    </Link>
-                                    {user?.role === 'seller' || user?.role === 'admin' ? (
-                                        <Link to="/seller" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors">
-                                            <FiSettings className="w-4 h-4" />
-                                            <span className="hidden sm:inline">Dashboard</span>
-                                        </Link>
-                                    ) : (
-                                        <Link to="/builder" className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors">
-                                            <FiShoppingBag className="w-4 h-4" />
-                                            <span className="hidden sm:inline">Build Kit</span>
-                                        </Link>
-                                    )}
-                                    <button onClick={handleLogout} className="p-2 text-gray-400 hover:text-red-500 transition-colors" title="Logout">
-                                        <FiLogOut className="w-5 h-5" />
-                                    </button>
-                                </>
-                            ) : (
-                                <>
-                                    <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-emerald-600 transition-colors">
-                                        Login
-                                    </Link>
-                                    <Link to="/signup" className="px-5 py-2 text-sm font-medium text-white bg-emerald-600 rounded-full hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-500/25">
-                                        Get Started
-                                    </Link>
-                                </>
-                            )}
-                        </div>
-                    </div>
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-10 flex flex-wrap gap-4"
+            >
+              <Link
+                to="/explore"
+                className="group inline-flex items-center gap-2 px-7 py-4 rounded-full font-semibold text-base bg-neutral-900 text-white hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/20"
+              >
+                Start Building
+                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
+                to="/brands"
+                className="group inline-flex items-center gap-2 px-7 py-4 rounded-full font-semibold text-base border-2 border-neutral-200 text-neutral-700 hover:border-neutral-300 hover:bg-white transition-all"
+              >
+                <FiPlay className="w-4 h-4" />
+                See How It Works
+              </Link>
+            </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-14 flex gap-10"
+            >
+              {[
+                { value: '120+', label: 'Ethical Brands' },
+                { value: '500K', label: 'Trees Planted' },
+                { value: '4.9', label: 'Avg Rating', icon: FiStar },
+              ].map((stat, i) => (
+                <div key={i} className="text-center">
+                  <div className="flex items-center justify-center gap-1 text-2xl font-bold text-neutral-900">
+                    {stat.icon && <stat.icon className="w-5 h-5 text-amber-500 fill-amber-500" />}
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-neutral-500 mt-0.5">{stat.label}</div>
                 </div>
-            </nav>
+              ))}
+            </motion.div>
+          </motion.div>
 
-            {/* Hero Section */}
-            <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-                {/* Animated Background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-cyan-50">
-                    <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-                    <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20" />
+          {/* Right - Product Images Grid */}
+          <motion.div 
+            style={{ y: imageY }}
+            className="relative hidden lg:block"
+          >
+            <div className="relative h-[600px]">
+              {/* Main large image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+                className="absolute top-0 right-0 w-72 h-96 rounded-3xl overflow-hidden shadow-2xl shadow-neutral-900/10"
+              >
+                <img 
+                  src={heroImages[0]} 
+                  alt="Sustainable skincare"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              </motion.div>
+
+              {/* Second image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.45 }}
+                className="absolute top-20 left-0 w-56 h-72 rounded-3xl overflow-hidden shadow-2xl shadow-neutral-900/10"
+              >
+                <img 
+                  src={heroImages[1]} 
+                  alt="Natural products"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+
+              {/* Third image */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.6 }}
+                className="absolute bottom-0 right-20 w-48 h-64 rounded-3xl overflow-hidden shadow-2xl shadow-neutral-900/10"
+              >
+                <img 
+                  src={heroImages[2]} 
+                  alt="Eco packaging"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+
+              {/* Floating badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.8 }}
+                className="absolute top-40 right-72 bg-white rounded-2xl p-4 shadow-xl shadow-neutral-900/10"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <RiLeafLine className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-neutral-500">This month</div>
+                    <div className="font-bold text-neutral-900">12K Trees</div>
+                  </div>
                 </div>
+              </motion.div>
 
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-                    <div className="text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6 }}
-                        >
-                            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-6">
-                                <RiLeafLine   className="w-4 h-4" />
-                                Sustainable Living Made Simple
-                            </span>
-                        </motion.div>
-
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.1 }}
-                            className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight leading-tight"
-                        >
-                            Discover Brands That
-                            <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-cyan-500">
-                                Care About Tomorrow
-                            </span>
-                        </motion.h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.2 }}
-                            className="mt-6 text-xl text-gray-600 max-w-2xl mx-auto"
-                        >
-                            Shop from verified sustainable brands and build your personalized eco-kit. Every purchase makes a positive impact.
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.3 }}
-                            className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
-                        >
-                            {isAuthenticated ? (
-                                <>
-                                    <a href="#brands" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-emerald-600 rounded-2xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:-translate-y-1">
-                                        Explore Brands
-                                        <FiArrowRight className="w-5 h-5" />
-                                    </a>
-                                    {user?.role === 'customer' && (
-                                        <Link to="/builder" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-emerald-700 bg-white rounded-2xl hover:bg-gray-50 transition-all border-2 border-emerald-200 hover:-translate-y-1">
-                                            <FiShoppingBag className="w-5 h-5" />
-                                            Build Your Kit
-                                        </Link>
-                                    )}
-                                </>
-                            ) : (
-                                <>
-                                    <Link to="/signup" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-emerald-600 rounded-2xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-500/30 hover:shadow-emerald-500/40 hover:-translate-y-1">
-                                        Start Shopping
-                                        <FiArrowRight className="w-5 h-5" />
-                                    </Link>
-                                    <Link to="/login" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-gray-700 bg-white rounded-2xl hover:bg-gray-50 transition-all border-2 border-gray-200 hover:-translate-y-1">
-                                        I Have an Account
-                                    </Link>
-                                </>
-                            )}
-                        </motion.div>
-
-                        {/* Quick Stats */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: 0.5 }}
-                            className="mt-16 flex flex-wrap justify-center gap-8 md:gap-16"
-                        >
-                            {[
-                                { value: '50+', label: 'Brands' },
-                                { value: '10k+', label: 'Products' },
-                                { value: '25k+', label: 'Customers' }
-                            ].map((stat, idx) => (
-                                <div key={idx} className="text-center">
-                                    <div className="text-3xl md:text-4xl font-bold text-gray-900">{stat.value}</div>
-                                    <div className="text-gray-500 text-sm uppercase tracking-wider">{stat.label}</div>
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
+              {/* Rating badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                className="absolute bottom-20 left-20 bg-white rounded-2xl p-4 shadow-xl shadow-neutral-900/10"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="flex">
+                    {[...Array(5)].map((_, i) => (
+                      <FiStar key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <span className="font-semibold text-neutral-900">4.9</span>
                 </div>
-
-                {/* Scroll Indicator */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1 }}
-                    className="absolute bottom-10 left-1/2 -translate-x-1/2"
-                >
-                    <a href="#brands" className="flex flex-col items-center text-gray-400 hover:text-emerald-500 transition-colors">
-                        <span className="text-xs uppercase tracking-widest mb-2">Scroll</span>
-                        <motion.div
-                            animate={{ y: [0, 8, 0] }}
-                            transition={{ repeat: Infinity, duration: 1.5 }}
-                        >
-                            <FiArrowRight className="w-5 h-5 rotate-90" />
-                        </motion.div>
-                    </a>
-                </motion.div>
-            </section>
-
-            {/* Featured Brands Section */}
-            <section id="brands" className="py-24 bg-gradient-to-b from-white to-gray-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <motion.span
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            viewport={{ once: true }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-4"
-                        >
-                            <FiStar className="w-4 h-4" />
-                            Our Partner Brands
-                        </motion.span>
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold text-gray-900"
-                        >
-                            Shop from Trusted Brands
-                        </motion.h2>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 }}
-                            className="mt-4 text-xl text-gray-600 max-w-2xl mx-auto"
-                        >
-                            {isAuthenticated 
-                                ? "Click on a brand to explore their collection and start building your kit."
-                                : "Login to explore our curated collection of sustainable brands."
-                            }
-                        </motion.p>
-                    </div>
-
-                    {loading ? (
-                        <div className="flex justify-center items-center py-20">
-                            <div className="relative">
-                                <div className="w-16 h-16 border-4 border-emerald-200 rounded-full animate-spin border-t-emerald-600"></div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                            {brands.map((brand, idx) => (
-                                <motion.div
-                                    key={brand.id}
-                                    initial={{ opacity: 0, y: 30 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    onHoverStart={() => setHoveredBrand(brand.id)}
-                                    onHoverEnd={() => setHoveredBrand(null)}
-                                    className="group relative"
-                                >
-                                    {isAuthenticated ? (
-                                        <Link to={`/brand/${brand.slug}`} className="block">
-                                            <BrandCard brand={brand} isHovered={hoveredBrand === brand.id} />
-                                        </Link>
-                                    ) : (
-                                        <Link to="/login" className="block">
-                                            <BrandCard brand={brand} isHovered={hoveredBrand === brand.id} locked />
-                                        </Link>
-                                    )}
-                                </motion.div>
-                            ))}
-                        </div>
-                    )}
-
-                    {!isAuthenticated && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="text-center mt-12"
-                        >
-                            <p className="text-gray-500 mb-4">Create an account to explore all brands and products</p>
-                            <Link to="/signup" className="inline-flex items-center gap-2 px-6 py-3 text-emerald-600 font-semibold hover:bg-emerald-50 rounded-full transition-colors">
-                                Sign up for free <FiArrowRight />
-                            </Link>
-                        </motion.div>
-                    )}
-                </div>
-            </section>
-
-            {/* Features Section */}
-            <section id="about" className="py-24 bg-white">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold mb-6">
-                                <FiBox className="w-4 h-4" />
-                                Why BrandKit
-                            </span>
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-                                Build Your Perfect
-                                <span className="text-emerald-600"> Sustainable Kit</span>
-                            </h2>
-                            <p className="mt-6 text-lg text-gray-600">
-                                Mix and match products from multiple brands to create your personalized eco-kit. 
-                                Every product is verified for sustainability and quality.
-                            </p>
-                            
-                            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                {features.map((feature, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: idx * 0.1 }}
-                                        className="flex gap-4"
-                                    >
-                                        <div className="flex-shrink-0 w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-emerald-600">
-                                            <feature.icon className="w-6 h-6" />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-gray-900">{feature.title}</h3>
-                                            <p className="text-gray-500 text-sm mt-1">{feature.description}</p>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="relative"
-                        >
-                            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                                <img 
-                                    src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80" 
-                                    alt="Sustainable Products" 
-                                    className="w-full h-[500px] object-cover"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                                <div className="absolute bottom-8 left-8 right-8 text-white">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <RiLeafLine   className="w-5 h-5 text-emerald-400" />
-                                        <span className="text-emerald-400 font-semibold">Eco-Friendly</span>
-                                    </div>
-                                    <p className="text-2xl font-bold">Products that make a difference</p>
-                                </div>
-                            </div>
-                            
-                            {/* Floating Stats Card */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.3 }}
-                                className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-6 shadow-xl border border-gray-100"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center">
-                                        <FiTrendingUp className="w-7 h-7 text-emerald-600" />
-                                    </div>
-                                    <div>
-                                        <div className="text-3xl font-bold text-gray-900">98%</div>
-                                        <div className="text-gray-500 text-sm">Customer Satisfaction</div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </motion.div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Impact Section */}
-            <section id="impact" className="py-24 bg-emerald-900 relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiIvPjwvZz48L2c+PC9zdmc+')]" />
-                </div>
-                
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-                    <div className="text-center mb-16">
-                        <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            className="text-4xl md:text-5xl font-bold text-white"
-                        >
-                            Our Collective Impact
-                        </motion.h2>
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.1 }}
-                            className="mt-4 text-xl text-emerald-200 max-w-2xl mx-auto"
-                        >
-                            Together with our community, we're making a real difference for the planet.
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                        {impactStats.map((stat, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="text-center"
-                            >
-                                <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                    <stat.icon className="w-8 h-8 text-emerald-400" />
-                                </div>
-                                <div className="text-4xl font-bold text-white mb-1">{stat.value}</div>
-                                <div className="text-emerald-200 text-sm uppercase tracking-wider">{stat.label}</div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA Section */}
-            {!isAuthenticated && (
-                <section className="py-24 bg-white">
-                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                        >
-                            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-                                Ready to Make a Difference?
-                            </h2>
-                            <p className="text-xl text-gray-600 mb-10">
-                                Join thousands of conscious consumers who are shopping sustainably.
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                                <Link to="/signup" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-emerald-600 rounded-2xl hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-500/30">
-                                    Create Free Account
-                                    <FiArrowRight className="w-5 h-5" />
-                                </Link>
-                                <Link to="/login" className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-gray-700 bg-gray-100 rounded-2xl hover:bg-gray-200 transition-all">
-                                    Sign In
-                                </Link>
-                            </div>
-                        </motion.div>
-                    </div>
-                </section>
-            )}
-
-            {/* Footer */}
-            <footer className="bg-gray-50 border-t border-gray-100 py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col md:flex-row justify-between items-center">
-                        <div className="mb-4 md:mb-0">
-                            <h2 className="text-2xl font-bold text-gray-900">Brand<span className="text-emerald-500">Kit</span></h2>
-                            <p className="text-gray-500 text-sm mt-1">Sustainable shopping, simplified.</p>
-                        </div>
-                        <div className="flex flex-wrap justify-center gap-6 text-gray-500 text-sm">
-                            <a href="#" className="hover:text-emerald-600 transition-colors">Privacy</a>
-                            <a href="#" className="hover:text-emerald-600 transition-colors">Terms</a>
-                            <a href="#" className="hover:text-emerald-600 transition-colors">Contact</a>
-                            <Link to="/login" className="hover:text-emerald-600 transition-colors">Sellers</Link>
-                        </div>
-                    </div>
-                    <div className="mt-8 pt-8 border-t border-gray-200 text-center text-gray-400 text-sm">
-                        © 2024 BrandKit. All rights reserved.
-                    </div>
-                </div>
-            </footer>
+                <div className="text-xs text-neutral-500 mt-1">50,000+ reviews</div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
-    );
+      </div>
+    </section>
+  );
 };
 
-// Brand Card Component
-const BrandCard = ({ brand, isHovered, locked }) => (
-    <div className={`relative bg-white rounded-3xl overflow-hidden shadow-lg transition-all duration-500 ${isHovered ? 'shadow-2xl scale-[1.02]' : ''}`}>
-        {/* Banner Image */}
-        <div className="relative h-56 overflow-hidden">
-            <img 
-                src={brand.banner_url || 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800'} 
-                alt={brand.name} 
-                className={`w-full h-full object-cover transition-transform duration-700 ${isHovered ? 'scale-110' : 'scale-100'}`}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-            
-            {/* Verified Badge */}
-            <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full">
-                <FiShield className="w-4 h-4 text-emerald-600" />
-                <span className="text-xs font-semibold text-gray-800">Verified</span>
-            </div>
+// ============================================
+// FEATURES SECTION - Bento Grid Layout
+// ============================================
+const FeaturesSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
 
-            {/* Logo */}
-            <div className="absolute bottom-4 left-6">
-                <div className="w-16 h-16 bg-white rounded-2xl shadow-lg p-2 flex items-center justify-center">
-                    <img 
-                        src={brand.logo_url || 'https://via.placeholder.com/100'} 
-                        alt={`${brand.name} logo`} 
-                        className="w-full h-full object-contain rounded-xl"
-                    />
+  return (
+    <section ref={ref} className="py-24 bg-gradient-to-b from-white to-neutral-50">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mb-16"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 mb-6">
+            <RiSparklingLine className="w-4 h-4 text-emerald-600" />
+            <span className="text-sm font-semibold text-emerald-700">Why Choose BrandKit</span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight">
+            Built for the
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent"> conscious </span>
+            consumer
+          </h2>
+        </motion.div>
+
+        {/* Bento Grid */}
+        <div className="grid grid-cols-12 gap-4 md:gap-6">
+          {/* Large Feature - Kit Builder */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="col-span-12 md:col-span-7 relative group"
+          >
+            <div className="relative h-full min-h-[320px] p-8 md:p-10 rounded-[2rem] bg-gradient-to-br from-emerald-500 via-emerald-600 to-teal-600 overflow-hidden">
+              {/* Decorative circles */}
+              <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/10 rounded-full blur-2xl" />
+              <div className="absolute -left-10 -bottom-10 w-48 h-48 bg-teal-400/20 rounded-full blur-xl" />
+              
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
+                    <FiBox className="w-7 h-7 text-white" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-3">Custom Kit Builder</h3>
+                  <p className="text-white/80 text-lg max-w-md leading-relaxed">
+                    Mix products from multiple ethical brands into one personalized subscription box. Your curation, your rules.
+                  </p>
                 </div>
+                <div className="flex items-center gap-3 mt-6">
+                  <Link to="/builder" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-emerald-700 font-semibold rounded-full text-sm hover:bg-white/90 transition-all">
+                    Try Builder <FiArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
             </div>
+          </motion.div>
+
+          {/* AI Recommendations */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="col-span-12 md:col-span-5 relative group"
+          >
+            <div className="relative h-full min-h-[320px] p-8 rounded-[2rem] bg-gradient-to-br from-violet-50 to-fuchsia-50 border border-violet-100 overflow-hidden hover:shadow-xl hover:shadow-violet-100/50 transition-all duration-500">
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-40 h-40 bg-violet-200/50 rounded-full blur-3xl" />
+              <div className="absolute bottom-0 left-0 w-32 h-32 bg-fuchsia-200/30 rounded-full blur-2xl" />
+              
+              <div className="relative z-10 h-full flex flex-col">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center mb-5 shadow-lg shadow-violet-200">
+                  <FiZap className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-neutral-900 mb-2">AI-Powered Picks</h3>
+                <p className="text-neutral-600 leading-relaxed flex-1">
+                  Smart recommendations that learn your values, preferences, and sustainability goals.
+                </p>
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="flex -space-x-2">
+                    {[0, 1, 2].map((i) => (
+                      <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-fuchsia-400 border-2 border-white flex items-center justify-center">
+                        <FiCheck className="w-4 h-4 text-white" />
+                      </div>
+                    ))}
+                  </div>
+                  <span className="text-neutral-500 text-sm">98% match accuracy</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Verified Ethical */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="col-span-12 sm:col-span-6 md:col-span-4"
+          >
+            <div className="relative h-full min-h-[280px] p-7 rounded-[2rem] bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 overflow-hidden group hover:shadow-xl hover:shadow-amber-100/50 transition-all duration-500">
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-gradient-to-br from-amber-200 to-orange-200 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700" />
+              
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mb-5 shadow-lg shadow-amber-200">
+                  <FiShield className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-neutral-900 mb-2">Verified Ethical</h3>
+                <p className="text-neutral-600 text-sm leading-relaxed mb-4">
+                  Every brand passes our rigorous 50-point sustainability audit.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {['B-Corp', 'Carbon Neutral', 'Fair Trade'].map((badge) => (
+                    <span key={badge} className="px-3 py-1 bg-white/80 rounded-full text-xs font-medium text-amber-700 border border-amber-200">
+                      {badge}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Impact Dashboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="col-span-12 sm:col-span-6 md:col-span-4"
+          >
+            <div className="relative h-full min-h-[280px] p-7 rounded-[2rem] bg-gradient-to-br from-cyan-50 to-sky-50 border border-cyan-100 overflow-hidden group hover:shadow-xl hover:shadow-cyan-100/50 transition-all duration-500">
+              {/* Mini chart visualization */}
+              <div className="absolute bottom-0 left-0 right-0 h-24 flex items-end justify-center gap-1.5 px-8 pb-4 opacity-30">
+                {[40, 65, 45, 80, 55, 90, 70, 85].map((h, i) => (
+                  <div key={i} className="w-full bg-gradient-to-t from-cyan-400 to-cyan-300 rounded-t" style={{ height: `${h}%` }} />
+                ))}
+              </div>
+              
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-sky-500 flex items-center justify-center mb-5 shadow-lg shadow-cyan-200">
+                  <FiTrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-neutral-900 mb-2">Impact Dashboard</h3>
+                <p className="text-neutral-600 text-sm leading-relaxed">
+                  Track trees planted, carbon offset & water saved in real-time.
+                </p>
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-3xl font-bold text-cyan-600">2.5M</span>
+                  <span className="text-sm text-neutral-500">kg CO₂ offset</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Flexible Delivery */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="col-span-12 md:col-span-4"
+          >
+            <div className="relative h-full min-h-[280px] p-7 rounded-[2rem] bg-white border border-neutral-200 overflow-hidden group hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-50 transition-all duration-500">
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center mb-5">
+                  <FiLayers className="w-6 h-6 text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold text-neutral-900 mb-2">Flexible Delivery</h3>
+                <p className="text-neutral-600 text-sm leading-relaxed mb-4">
+                  Weekly, monthly, or quarterly—you choose your rhythm.
+                </p>
+                <div className="flex gap-2">
+                  {['Weekly', 'Monthly', 'Quarterly'].map((freq, i) => (
+                    <span 
+                      key={freq} 
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold ${
+                        i === 1 
+                          ? 'bg-emerald-100 text-emerald-700 ring-2 ring-emerald-500 ring-offset-2' 
+                          : 'bg-neutral-100 text-neutral-600'
+                      }`}
+                    >
+                      {freq}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================
+// BRANDS SECTION - Premium Showcase
+// ============================================
+const BrandsSection = () => {
+  const [brands, setBrands] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await brandService.getAllBrands();
+        const data = response?.data || response?.brands || response;
+        setBrands(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error fetching brands:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  const displayBrands = brands.length > 0 ? brands.slice(0, 2) : [];
+
+  return (
+    <section ref={ref} className="py-28 bg-[#fafaf9] relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-100/50 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-100/50 rounded-full blur-3xl" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="grid lg:grid-cols-2 gap-12 items-end mb-16">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 mb-6">
+              <RiLeafLine className="w-4 h-4 text-emerald-600" />
+              <span className="text-sm font-medium text-emerald-700">Handpicked Partners</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight">
+              Meet the brands
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
+                shaping tomorrow
+              </span>
+            </h2>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="lg:text-right"
+          >
+            <p className="text-neutral-600 text-lg mb-6 max-w-md lg:ml-auto">
+              Each brand is vetted through our 50-point ethical audit covering supply chain, labor practices, and environmental impact.
+            </p>
+            <Link
+              to="/brands"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white font-semibold rounded-full hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/20"
+            >
+              Explore All Brands <FiArrowRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
         </div>
 
-        {/* Content */}
-        <div className="p-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{brand.name}</h3>
-            <p className="text-gray-500 text-sm line-clamp-2 mb-4">
-                {brand.description || 'Discover premium sustainable products crafted with care.'}
+        {/* Brands Grid */}
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+          </div>
+        ) : displayBrands.length > 0 ? (
+          <div className="grid lg:grid-cols-2 gap-6">
+            {displayBrands.map((brand, index) => (
+              <motion.div
+                key={brand.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.7, delay: 0.2 + index * 0.15 }}
+              >
+                <Link
+                  to={`/brands/${brand.slug || brand.id}`}
+                  className="group block relative h-[400px] rounded-[2rem] overflow-hidden bg-white border border-neutral-200 hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-100/50 transition-all duration-500"
+                >
+                  {/* Background Image */}
+                  <div className="absolute inset-0 h-[60%]">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center transform group-hover:scale-105 transition-transform duration-700"
+                      style={{ 
+                        backgroundImage: `url(${brand.hero_image_url || brand.logo_url || `https://images.unsplash.com/photo-${index === 0 ? '1542601906990-b4d3fb778b09' : '1556228578-0d85b1a4d571'}?w=800`})` 
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent" />
+                  </div>
+
+                  {/* Content */}
+                  <div className="absolute inset-0 p-7 flex flex-col justify-between">
+                    {/* Top badges */}
+                    <div className="flex justify-between items-start">
+                      <div className="flex flex-wrap gap-2">
+                        {(brand.certifications || ['Organic', 'Cruelty-Free']).slice(0, 2).map((cert, i) => (
+                          <span 
+                            key={i}
+                            className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-xs font-semibold text-emerald-700 border border-emerald-100 shadow-sm"
+                          >
+                            {cert}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-1 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full border border-amber-100 shadow-sm">
+                        <FiStar className="w-4 h-4 text-amber-500 fill-amber-500" />
+                        <span className="text-sm font-bold text-neutral-900">{brand.rating || '4.8'}</span>
+                      </div>
+                    </div>
+
+                    {/* Bottom info */}
+                    <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-5 border border-neutral-100">
+                      <h3 className="text-2xl font-bold text-neutral-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                        {brand.name}
+                      </h3>
+                      <p className="text-neutral-600 text-sm mb-4 line-clamp-2">
+                        {brand.description || brand.tagline || 'Committed to sustainable and ethical practices in every product.'}
+                      </p>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center gap-2 text-neutral-500 text-sm">
+                          <FiPackage className="w-4 h-4" />
+                          {brand.product_count || '15'} Products
+                        </span>
+                        
+                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 font-semibold rounded-full text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all">
+                          Shop Now <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16 bg-white rounded-3xl border border-neutral-200">
+            <p className="text-neutral-500 mb-4">No brands available at the moment.</p>
+            <Link to="/explore" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all">
+              Explore Products <FiArrowRight />
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+};
+
+// ============================================
+// HOW IT WORKS - Vertical Timeline
+// ============================================
+const HowItWorksSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const steps = [
+    {
+      step: '01',
+      title: 'Discover Ethical Brands',
+      description: 'Browse our curated collection of verified sustainable brands. Each one meets our strict 50-point ethical standards covering environmental impact, labor practices, and supply chain transparency.',
+      icon: FiGlobe,
+    },
+    {
+      step: '02',
+      title: 'Build Your Perfect Kit',
+      description: 'Mix and match products from different brands into one custom subscription box. Choose your delivery frequency—weekly, monthly, or quarterly—to match your lifestyle.',
+      icon: FiBox,
+    },
+    {
+      step: '03',
+      title: 'Get AI-Powered Picks',
+      description: 'Our intelligent recommendation engine learns your preferences and suggests products that align perfectly with your values, needs, and sustainability goals.',
+      icon: FiZap,
+    },
+    {
+      step: '04',
+      title: 'Track Your Impact',
+      description: 'Watch your positive footprint grow with every order. Track trees planted, carbon offset, water saved, and more through your personalized impact dashboard.',
+      icon: FiTrendingUp,
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-28 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-20"
+        >
+          <span className="text-sm font-semibold text-emerald-600 uppercase tracking-wider">How It Works</span>
+          <h2 className="mt-3 text-4xl md:text-5xl font-bold text-neutral-900">
+            Simple Steps to<br />Sustainable Living
+          </h2>
+        </motion.div>
+
+        <div className="relative">
+          {/* Vertical line */}
+          <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-200 via-teal-200 to-cyan-200 md:-translate-x-px" />
+
+          {steps.map((step, index) => (
+            <motion.div
+              key={step.step}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
+              className={`relative flex items-start gap-8 mb-16 last:mb-0 ${
+                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+              }`}
+            >
+              {/* Timeline dot */}
+              <div className="absolute left-8 md:left-1/2 w-4 h-4 rounded-full bg-white border-4 border-emerald-500 -translate-x-1/2 mt-2 z-10" />
+
+              {/* Content */}
+              <div className={`flex-1 pl-20 md:pl-0 ${index % 2 === 0 ? 'md:pr-20 md:text-right' : 'md:pl-20'}`}>
+                <div className={`inline-flex items-center gap-3 mb-4 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <step.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-sm font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                    Step {step.step}
+                  </span>
+                </div>
+                
+                <h3 className="text-2xl font-bold text-neutral-900 mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-neutral-600 leading-relaxed max-w-md inline-block">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Spacer for alternating layout */}
+              <div className="hidden md:block flex-1" />
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-16 text-center"
+        >
+          <Link
+            to="/builder"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-neutral-900 text-white font-semibold rounded-full hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/20"
+          >
+            Start Building Your Kit <FiArrowRight />
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================
+// TESTIMONIALS - Compact Professional Design
+// ============================================
+const TestimonialsSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  
+  const testimonials = [
+    {
+      quote: "BrandKit transformed how I approach sustainable living. The curated selection makes discovering ethical brands effortless.",
+      author: "Sarah Chen",
+      role: "Environmental Advocate",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop",
+    },
+    {
+      quote: "The transparency and impact tracking keeps me motivated. I love seeing exactly where my products come from.",
+      author: "Marcus Johnson",
+      role: "Sustainability Blogger",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop",
+    },
+    {
+      quote: "AI recommendations are spot-on! Found perfect zero-waste alternatives for my entire skincare routine.",
+      author: "Emma Williams",
+      role: "Conscious Consumer",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-20 bg-white">
+      <div className="max-w-6xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <span className="text-sm font-semibold text-emerald-600 uppercase tracking-wider">Testimonials</span>
+          <h2 className="mt-2 text-3xl md:text-4xl font-bold text-neutral-900">
+            Trusted by Thousands
+          </h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="bg-neutral-50 rounded-2xl p-6 border border-neutral-100 hover:shadow-lg hover:shadow-neutral-100 transition-all duration-300"
+            >
+              {/* Stars */}
+              <div className="flex gap-0.5 mb-4">
+                {[...Array(5)].map((_, j) => (
+                  <FiStar key={j} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+
+              {/* Quote */}
+              <p className="text-neutral-600 text-sm leading-relaxed mb-5">
+                "{t.quote}"
+              </p>
+
+              {/* Author */}
+              <div className="flex items-center gap-3 pt-4 border-t border-neutral-200">
+                <img 
+                  src={t.avatar} 
+                  alt={t.author}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <div>
+                  <div className="font-semibold text-sm text-neutral-900">{t.author}</div>
+                  <div className="text-xs text-neutral-500">{t.role}</div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================
+// CTA SECTION
+// ============================================
+const CTASection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section ref={ref} className="py-28 bg-white">
+      <div className="max-w-5xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 1 } : {}}
+          transition={{ duration: 0.6 }}
+          className="relative p-14 md:p-20 rounded-[2.5rem] bg-neutral-900 text-white text-center overflow-hidden"
+        >
+          {/* Background elements */}
+          <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+          
+          <div className="relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-8"
+            >
+              <FiAward className="w-4 h-4 text-emerald-400" />
+              Join 50,000+ conscious consumers
+            </motion.div>
+
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              Ready to Make<br />a Real Impact?
+            </h2>
+            
+            <p className="text-lg text-neutral-400 mb-10 max-w-xl mx-auto">
+              Start your sustainable journey today. Build your first kit in minutes and join the movement for positive change.
             </p>
             
-            <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-emerald-600">
-                    <RiLeafLine   className="w-4 h-4" />
-                    <span className="text-sm font-medium">Eco-Friendly</span>
-                </div>
-                <div className={`flex items-center gap-2 font-semibold transition-colors ${isHovered ? 'text-emerald-600' : 'text-gray-400'}`}>
-                    {locked ? (
-                        <>
-                            <span className="text-sm">Login to View</span>
-                            <FiArrowRight className="w-4 h-4" />
-                        </>
-                    ) : (
-                        <>
-                            <span className="text-sm">Explore</span>
-                            <FiArrowRight className={`w-4 h-4 transition-transform ${isHovered ? 'translate-x-1' : ''}`} />
-                        </>
-                    )}
-                </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/signup"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg bg-white text-neutral-900 hover:bg-neutral-100 transition-all shadow-xl"
+              >
+                Get Started Free <FiArrowRight />
+              </Link>
+              <Link
+                to="/explore"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg border border-white/20 text-white hover:bg-white/10 transition-all"
+              >
+                Explore Products
+              </Link>
             </div>
-        </div>
 
-        {/* Lock Overlay for non-authenticated users */}
-        {locked && (
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="text-center">
-                    <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <FiShoppingBag className="w-8 h-8 text-emerald-600" />
-                    </div>
-                    <p className="text-gray-900 font-semibold">Login to explore</p>
-                    <p className="text-gray-500 text-sm">Create a free account to shop</p>
-                </div>
+            <div className="mt-12 flex items-center justify-center gap-8 text-sm text-neutral-500">
+              <span className="flex items-center gap-2">
+                <FiCheck className="w-4 h-4 text-emerald-400" /> Free to join
+              </span>
+              <span className="flex items-center gap-2">
+                <FiCheck className="w-4 h-4 text-emerald-400" /> No commitments
+              </span>
+              <span className="flex items-center gap-2">
+                <FiCheck className="w-4 h-4 text-emerald-400" /> Cancel anytime
+              </span>
             </div>
-        )}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// ============================================
+// MAIN PLATFORM HOME
+// ============================================
+const PlatformHome = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-white">
+      <Navbar />
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <BrandsSection />
+        <HowItWorksSection />
+        <TestimonialsSection />
+        <CTASection />
+      </main>
+      <Footer />
     </div>
-);
+  );
+};
 
 export default PlatformHome;

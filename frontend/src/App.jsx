@@ -10,9 +10,7 @@ import Login from './pages/auth/Login';
 import Signup from './pages/auth/Signup';
 import DashboardLayout from './pages/seller/DashboardLayout';
 import DashboardHome from './pages/seller/DashboardHome';
-import BrandSettings from './pages/seller/BrandSettings';
 import ProductManager from './pages/seller/ProductManager';
-import SellerAnalytics from './pages/seller/SellerAnalytics';
 import PlatformHome from './pages/PlatformHome';
 
 import ProtectedRoute from './components/ProtectedRoute';
@@ -73,9 +71,7 @@ function App() {
             </ProtectedRoute>
           }>
             <Route index element={<DashboardHome />} />
-            <Route path="settings" element={<BrandSettings />} />
             <Route path="products" element={<ProductManager />} />
-            <Route path="analytics" element={<SellerAnalytics />} />
           </Route>
 
           {/* Default catch-all */}

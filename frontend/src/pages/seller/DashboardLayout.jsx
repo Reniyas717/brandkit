@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { FiHome, FiPackage, FiSettings, FiLogOut, FiMenu, FiBarChart2 } from 'react-icons/fi';
+import { FiHome, FiPackage, FiLogOut, FiMenu } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SidebarLink = ({ to, icon: Icon, children }) => {
@@ -46,8 +46,6 @@ const DashboardLayout = () => {
                 <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
                     <SidebarLink to="/seller" icon={FiHome}>Overview</SidebarLink>
                     <SidebarLink to="/seller/products" icon={FiPackage}>Products</SidebarLink>
-                    <SidebarLink to="/seller/analytics" icon={FiBarChart2}>Analytics</SidebarLink>
-                    <SidebarLink to="/seller/settings" icon={FiSettings}>Brand Settings</SidebarLink>
                 </nav>
 
                 <div className="p-4 border-t border-gray-100">
