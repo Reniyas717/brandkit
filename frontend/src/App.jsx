@@ -12,6 +12,8 @@ import DashboardLayout from './pages/seller/DashboardLayout';
 import DashboardHome from './pages/seller/DashboardHome';
 import ProductManager from './pages/seller/ProductManager';
 import PlatformHome from './pages/PlatformHome';
+import EcoLuxLanding from './pages/EcoLuxLanding';
+import TerraVerdeLanding from './pages/TerraVerdeLanding';
 
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -25,6 +27,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
 
+          {/* Brand Landing Pages - Public Routes */}
+          <Route path="/brand/ecolux-essentials" element={<EcoLuxLanding />} />
+          <Route path="/brand/terra-verde" element={<TerraVerdeLanding />} />
+          
           {/* Protected Brand-specific Routes - Requires Login */}
           <Route path="/brand/:slug" element={
             <ProtectedRoute allowedRoles={['customer', 'seller', 'admin']}>

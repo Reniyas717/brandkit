@@ -301,7 +301,7 @@ const KitBuilder = () => {
                                                     {inCart ? (
                                                         <div className="flex items-center gap-2 bg-emerald-50 rounded-xl p-1">
                                                             <button
-                                                                onClick={() => handleQuantityChange(cartItem.id, quantity - 1)}
+                                                                onClick={() => handleQuantityChange(product.id, quantity - 1)}
                                                                 className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-emerald-600 hover:bg-emerald-100 transition-colors"
                                                             >
                                                                 <FiMinus className="w-4 h-4" />
@@ -310,7 +310,7 @@ const KitBuilder = () => {
                                                                 {quantity}
                                                             </span>
                                                             <button
-                                                                onClick={() => handleQuantityChange(cartItem.id, quantity + 1)}
+                                                                onClick={() => handleQuantityChange(product.id, quantity + 1)}
                                                                 className="w-8 h-8 bg-white rounded-lg flex items-center justify-center text-emerald-600 hover:bg-emerald-100 transition-colors"
                                                             >
                                                                 <FiPlus className="w-4 h-4" />
@@ -350,14 +350,34 @@ const KitBuilder = () => {
                     
                     <div className="space-y-3 mb-4 max-h-48 overflow-y-auto">
                         {items.map(item => (
-                            <div key={item.product_id || item.id} className="flex items-center justify-between text-sm">
-                                <div className="flex flex-col">
-                                    <span className="text-gray-800 font-medium">{item.name} × {item.quantity}</span>
+                            <div key={item.product_id || item.id} className="flex items-center justify-between text-sm gap-3">
+                                <div className="flex flex-col flex-1 min-w-0">
+                                    <span className="text-gray-800 font-medium truncate">{item.name}</span>
                                     {item.brand_name && (
                                         <span className="text-xs text-gray-500">from {item.brand_name}</span>
                                     )}
                                 </div>
-                                <span className="font-medium text-emerald-600">₹{((item.price || item.price_at_addition || 0) * item.quantity).toFixed(2)}</span>
+                                
+                                {/* Quantity Controls */}
+                                <div className="flex items-center gap-1 bg-emerald-50 rounded-lg p-1">
+                                    <button
+                                        onClick={() => handleQuantityChange(item.product_id, item.quantity - 1)}
+                                        className="w-6 h-6 bg-white rounded flex items-center justify-center text-emerald-600 hover:bg-emerald-100 transition-colors"
+                                    >
+                                        <FiMinus className="w-3 h-3" />
+                                    </button>
+                                    <span className="w-6 text-center font-bold text-emerald-700 text-xs">
+                                        {item.quantity}
+                                    </span>
+                                    <button
+                                        onClick={() => handleQuantityChange(item.product_id, item.quantity + 1)}
+                                        className="w-6 h-6 bg-white rounded flex items-center justify-center text-emerald-600 hover:bg-emerald-100 transition-colors"
+                                    >
+                                        <FiPlus className="w-3 h-3" />
+                                    </button>
+                                </div>
+                                
+                                <span className="font-medium text-emerald-600 whitespace-nowrap">₹{((item.price || item.price_at_addition || 0) * item.quantity).toFixed(2)}</span>
                             </div>
                         ))}
                     </div>

@@ -511,7 +511,7 @@ const BrandsSection = () => {
                 transition={{ duration: 0.7, delay: 0.2 + index * 0.15 }}
               >
                 <Link
-                  to={`/brands/${brand.slug || brand.id}`}
+                  to={`/brand/${brand.slug || brand.id}`}
                   className="group block relative h-[400px] rounded-[2rem] overflow-hidden bg-white border border-neutral-200 hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-100/50 transition-all duration-500"
                 >
                   {/* Background Image */}
@@ -777,68 +777,69 @@ const TestimonialsSection = () => {
 };
 
 // ============================================
-// CTA SECTION
+// CTA SECTION - Light Theme
 // ============================================
 const CTASection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="py-28 bg-white">
+    <section ref={ref} className="py-28 bg-[#fafaf9]">
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 1 } : {}}
           transition={{ duration: 0.6 }}
-          className="relative p-14 md:p-20 rounded-[2.5rem] bg-neutral-900 text-white text-center overflow-hidden"
+          className="relative p-14 md:p-20 rounded-[2.5rem] bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border border-emerald-100 text-center overflow-hidden"
         >
           {/* Background elements */}
-          <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-0 left-0 w-64 h-64 bg-emerald-200/30 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-200/20 rounded-full blur-3xl" />
           
           <div className="relative z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 }}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-sm font-medium mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-emerald-200 rounded-full text-sm font-medium text-emerald-700 mb-8 shadow-sm"
             >
-              <FiAward className="w-4 h-4 text-emerald-400" />
+              <FiAward className="w-4 h-4 text-emerald-600" />
               Join 50,000+ conscious consumers
             </motion.div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              Ready to Make<br />a Real Impact?
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-neutral-900">
+              Ready to Make<br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">a Real Impact?</span>
             </h2>
             
-            <p className="text-lg text-neutral-400 mb-10 max-w-xl mx-auto">
+            <p className="text-lg text-neutral-600 mb-10 max-w-xl mx-auto">
               Start your sustainable journey today. Build your first kit in minutes and join the movement for positive change.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/signup"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg bg-white text-neutral-900 hover:bg-neutral-100 transition-all shadow-xl"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg bg-neutral-900 text-white hover:bg-neutral-800 transition-all shadow-lg shadow-neutral-900/20"
               >
                 Get Started Free <FiArrowRight />
               </Link>
               <Link
                 to="/explore"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg border border-white/20 text-white hover:bg-white/10 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg border-2 border-neutral-200 text-neutral-700 hover:border-neutral-300 hover:bg-white transition-all"
               >
                 Explore Products
               </Link>
             </div>
 
-            <div className="mt-12 flex items-center justify-center gap-8 text-sm text-neutral-500">
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-neutral-500">
               <span className="flex items-center gap-2">
-                <FiCheck className="w-4 h-4 text-emerald-400" /> Free to join
+                <FiCheck className="w-4 h-4 text-emerald-600" /> Free to join
               </span>
               <span className="flex items-center gap-2">
-                <FiCheck className="w-4 h-4 text-emerald-400" /> No commitments
+                <FiCheck className="w-4 h-4 text-emerald-600" /> No commitments
               </span>
               <span className="flex items-center gap-2">
-                <FiCheck className="w-4 h-4 text-emerald-400" /> Cancel anytime
+                <FiCheck className="w-4 h-4 text-emerald-600" /> Cancel anytime
               </span>
             </div>
           </div>
