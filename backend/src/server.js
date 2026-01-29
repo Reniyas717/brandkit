@@ -2,23 +2,28 @@ const app = require('./app');
 const config = require('./config/env');
 const db = require('./config/database');
 
-const PORT = config.port;
+const PORT = process.env.PORT || config.port || 5000;
+const HOST = '0.0.0.0'; // Required for Render
 
-// Test database connection
-db.query('SELECT NOW()')
-    .then(() => {
-        console.log('✅ Database connected successfully');
-
-        // Start server
-        app.listen(PORT, () => {
-            console.log(`🚀 Server running on port ${PORT} in ${config.nodeEnv} mode`);
-            console.log(`📡 API available at http://localhost:${PORT}/api/${config.apiVersion}`);
+// Start server first, then test database
+const server = app.listen(PORT, HOST, () => {
+    console.log(`🚀 Server running on ${HOST}:${PORT} in ${config.nodeEnv} mode`);
+    console.log(`📡 API available at http://localhost:${PORT}/api/${config.apiVersion}`);
+    
+    // Test database connection after server starts
+    db.query('SELECT NOW()')
+        .then((result) => {
+            console.log('✅ Database connected successfully at:', result.rows[0].now);
+        })
+        .catch((err) => {
+            console.error('⚠️ Database connection warning:', err.message);
+            console.log('Server will continue running, but database features may not work.');
         });
-    })
-    .catch((err) => {
-        console.error('❌ Database connection failed:', err.message);
-        process.exit(1);
-    });
+});
+
+server.on('error', (err) => {
+    console.error('Server error:', err.message);
+});
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err) => {

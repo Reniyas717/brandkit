@@ -12,9 +12,31 @@ const app = express();
 // Security middleware
 app.use(helmet());
 
-// CORS configuration
+// CORS configuration - Allow multiple origins
+const allowedOrigins = [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.CORS_ORIGIN,
+    process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-    origin: config.corsOrigin,
+    origin: function (origin, callback) {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        
+        // Check if origin is allowed
+        if (allowedOrigins.some(allowed => origin.startsWith(allowed) || allowed.includes('vercel.app') && origin.includes('vercel.app'))) {
+            return callback(null, true);
+        }
+        
+        // Allow all vercel.app domains in production
+        if (origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+        
+        callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
 }));
 
