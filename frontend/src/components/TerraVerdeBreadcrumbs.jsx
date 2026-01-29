@@ -1,15 +1,15 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaChevronRight } from 'react-icons/fa';
+import { GiTreeBranch } from 'react-icons/gi';
 import { motion } from 'framer-motion';
 
-const Breadcrumbs = ({ items = [] }) => {
+const TerraVerdeBreadcrumbs = ({ items = [] }) => {
     const location = useLocation();
 
     // Default path mapping for auto-detection
     const pathMap = {
         '/': 'Home',
-        '/builder': 'Build Your Kit',
-        '/review': 'Review & Confirm',
+        '/brand/terra-verde': 'Terra Verde',
         '/products': 'Products'
     };
 
@@ -22,17 +22,20 @@ const Breadcrumbs = ({ items = [] }) => {
         }))
     ] : [
         { name: 'Home', path: '/' },
-        ...location.pathname.split('/').filter(Boolean).map((path, index, arr) => ({
-            name: pathMap[`/${path}`] || path,
-            path: `/${arr.slice(0, index + 1).join('/')}`
-        }))
+        ...location.pathname.split('/').filter(Boolean).map((path, index, arr) => {
+            const fullPath = `/${arr.slice(0, index + 1).join('/')}`;
+            return {
+                name: pathMap[fullPath] || path,
+                path: fullPath
+            };
+        })
     ];
 
     return (
         <motion.div 
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/95 backdrop-blur-md border-b border-gray-100 mt-24 z-30 shadow-sm sticky top-20"
+            className="bg-gray-900/95 backdrop-blur-md border-b border-gray-800 mt-24 z-30 shadow-sm sticky top-20"
         >
             <div className="container mx-auto px-6 py-4">
                 <nav className="flex items-center space-x-2 text-sm">
@@ -47,23 +50,24 @@ const Breadcrumbs = ({ items = [] }) => {
                             {index === 0 ? (
                                 <Link
                                     to={crumb.path}
-                                    className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors duration-200 font-medium hover:bg-emerald-50 px-2 py-1 rounded-lg"
+                                    className="flex items-center gap-2 text-gray-400 hover:text-green-400 transition-colors duration-200 font-medium hover:bg-green-500/10 px-2 py-1 rounded-lg"
                                 >
                                     <FaHome className="w-4 h-4" />
                                     <span>{crumb.name}</span>
                                 </Link>
                             ) : (
                                 <>
-                                    <FaChevronRight className="w-3 h-3 text-gray-400" />
-                                    {crumb.path && index !== breadcrumbItems.length - 1 ? (
+                                    <FaChevronRight className="w-3 h-3 text-gray-600" />
+                                    {crumb.path ? (
                                         <Link
                                             to={crumb.path}
-                                            className="text-gray-600 hover:text-emerald-600 transition-colors duration-200 font-medium hover:bg-emerald-50 px-2 py-1 rounded-lg"
+                                            className="text-gray-400 hover:text-green-400 transition-colors duration-200 font-medium hover:bg-green-500/10 px-2 py-1 rounded-lg capitalize"
                                         >
                                             {crumb.name}
                                         </Link>
                                     ) : (
-                                        <span className="text-emerald-600 font-bold bg-emerald-50 px-3 py-1 rounded-full text-xs">
+                                        <span className="text-green-400 font-semibold px-2 py-1 capitalize flex items-center gap-2">
+                                            <GiTreeBranch className="w-4 h-4" />
                                             {crumb.name}
                                         </span>
                                     )}
@@ -77,4 +81,4 @@ const Breadcrumbs = ({ items = [] }) => {
     );
 };
 
-export default Breadcrumbs;
+export default TerraVerdeBreadcrumbs;

@@ -1,272 +1,289 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaSeedling, FaLeaf, FaMountain, FaWater, FaArrowRight } from 'react-icons/fa';
-import { GiEarthAmerica, GiTreeBranch, GiRose } from 'react-icons/gi';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { FaLeaf, FaArrowRight, FaStar, FaPlay, FaShippingFast, FaRecycle, FaHeart, FaQuoteLeft } from 'react-icons/fa';
+import { GiPlantSeed } from 'react-icons/gi';
 
-const TerraVerdeHero = ({ brand }) => {
-    const floatingElements = [
-        { Icon: FaSeedling, delay: 0, position: 'top-20 left-10' },
-        { Icon: FaLeaf, delay: 0.5, position: 'top-40 right-20' },
-        { Icon: GiRose, delay: 1, position: 'bottom-40 left-20' },
-        { Icon: GiTreeBranch, delay: 1.5, position: 'bottom-20 right-10' },
-    ];
+// Typewriter Effect Component
+const TypewriterText = ({ words, className }) => {
+    const [currentWordIndex, setCurrentWordIndex] = useState(0);
+    const [currentText, setCurrentText] = useState('');
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    useEffect(() => {
+        const word = words[currentWordIndex];
+        const timeout = setTimeout(() => {
+            if (!isDeleting) {
+                setCurrentText(word.substring(0, currentText.length + 1));
+                if (currentText === word) {
+                    setTimeout(() => setIsDeleting(true), 2000);
+                }
+            } else {
+                setCurrentText(word.substring(0, currentText.length - 1));
+                if (currentText === '') {
+                    setIsDeleting(false);
+                    setCurrentWordIndex((prev) => (prev + 1) % words.length);
+                }
+            }
+        }, isDeleting ? 50 : 100);
+
+        return () => clearTimeout(timeout);
+    }, [currentText, isDeleting, currentWordIndex, words]);
 
     return (
-        <section className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 relative overflow-hidden flex items-center">
-            {/* Enhanced Background Pattern */}
-            <div className="absolute inset-0 opacity-20">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `
-                        radial-gradient(circle at 25% 25%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
-                        radial-gradient(circle at 75% 75%, rgba(217, 119, 6, 0.1) 0%, transparent 50%),
-                        linear-gradient(45deg, transparent 40%, rgba(251, 191, 36, 0.08) 50%, transparent 60%)
-                    `
-                }} />
-                {/* Earth texture overlay */}
-                <div className="absolute inset-0 opacity-30" style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d97706' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                }} />
+        <span className={className}>
+            {currentText}
+            <span className="animate-pulse text-amber-500">|</span>
+        </span>
+    );
+};
+
+const TerraVerdeHero = ({ brand }) => {
+    const typewriterWords = ['Sustainable', 'Ethical', 'Handcrafted', 'Timeless'];
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const heroImages = [
+        'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=600&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&h=800&fit=crop'
+    ];
+
+    const stats = [
+        { number: '50+', label: 'Artisan Partners', icon: FaHeart },
+        { number: '15', label: 'Countries', icon: FaLeaf },
+        { number: '100%', label: 'Sustainable', icon: FaRecycle }
+    ];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <section className="relative bg-[#FFFBF5] overflow-hidden">
+            {/* Organic Background Shapes */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-100/30 rounded-full blur-3xl -translate-y-1/4 translate-x-1/4" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-100/40 rounded-full blur-3xl translate-y-1/4 -translate-x-1/4" />
+                <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] bg-amber-200/20 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
             </div>
 
-            {/* Floating Elements */}
-            {floatingElements.map(({ Icon, delay, position }, index) => (
-                <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                        opacity: [0.4, 0.7, 0.4], 
-                        y: [0, -10, 0],
-                        rotate: [0, 5, -5, 0]
-                    }}
-                    transition={{ 
-                        duration: 4, 
-                        delay: delay, 
-                        repeat: Infinity,
-                        repeatType: "reverse"
-                    }}
-                    className={`absolute ${position} w-8 h-8 text-amber-600`}
-                >
-                    <Icon className="w-full h-full" />
-                </motion.div>
-            ))}
-
-            {/* Main Content */}
-            <div className="container mx-auto px-8 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-                {/* Left Content */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="text-left"
-                >
-                    {/* Badge */}
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Vertical Stack Layout - Mobile First */}
+                <div className="flex flex-col lg:grid lg:grid-cols-12 lg:gap-8 items-center min-h-screen">
+                    
+                    {/* Image Section - Top on mobile, Right on desktop */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider mb-6 shadow-lg"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8 }}
+                        className="lg:col-span-7 lg:order-2 relative pt-24 lg:pt-32 pb-8 lg:pb-0"
                     >
-                        <GiEarthAmerica className="w-5 h-5" />
-                        Rooted in Nature
-                    </motion.div>
-
-                    {/* Main Heading */}
-                    <motion.h1
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="text-6xl lg:text-7xl font-black mb-6"
-                    >
-                        <span className="block bg-gradient-to-r from-amber-600 via-orange-600 to-yellow-600 bg-clip-text text-transparent">
-                            EARTH
-                        </span>
-                        <span className="block text-gray-900">
-                            CONSCIOUS
-                        </span>
-                        <span className="block bg-gradient-to-r from-green-700 via-emerald-600 to-teal-600 bg-clip-text text-transparent italic">
-                            Living
-                        </span>
-                    </motion.h1>
-
-                    {/* Subtitle */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="text-xl lg:text-2xl text-gray-700 mb-8 leading-relaxed max-w-2xl"
-                    >
-                        Connect with nature through artisan-crafted products that honor the earth. 
-                        <span className="font-bold text-amber-700"> Every choice nurtures both you and our planet.</span>
-                    </motion.p>
-
-                    {/* Stats */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
-                        className="grid grid-cols-3 gap-6 mb-10"
-                    >
-                        {[
-                            { number: '100%', label: 'Natural Materials' },
-                            { number: '50+', label: 'Artisan Partners' },
-                            { number: '0', label: 'Chemical Additives' }
-                        ].map((stat, index) => (
-                            <div key={index} className="text-center">
-                                <div className="text-3xl lg:text-4xl font-black text-amber-600 mb-1">
-                                    {stat.number}
-                                </div>
-                                <div className="text-sm text-gray-600 font-medium">
-                                    {stat.label}
+                        {/* Main Image Carousel */}
+                        <div className="relative max-w-md mx-auto lg:max-w-none">
+                            {/* Background Card */}
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-300/20 to-orange-300/20 rounded-[3rem] rotate-2 scale-105" />
+                            
+                            <div className="relative bg-white rounded-[2.5rem] overflow-hidden shadow-2xl shadow-amber-900/20 border-8 border-white">
+                                <AnimatePresence mode="wait">
+                                    <motion.img
+                                        key={currentImageIndex}
+                                        src={heroImages[currentImageIndex]}
+                                        alt="Terra Verde Fashion"
+                                        initial={{ opacity: 0, scale: 1.1 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.9 }}
+                                        transition={{ duration: 0.5 }}
+                                        className="w-full h-[400px] lg:h-[500px] object-cover"
+                                    />
+                                </AnimatePresence>
+                                
+                                {/* Image Overlay Badge */}
+                                <div className="absolute bottom-6 left-6 right-6">
+                                    <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-amber-100">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center">
+                                                <GiPlantSeed className="w-5 h-5 text-white" />
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-stone-800 text-sm">Earth Conscious</p>
+                                                <p className="text-xs text-stone-500">Made with Love</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        ))}
+
+                            {/* Floating Stats */}
+                            <div className="absolute -bottom-4 -right-4 lg:-right-8 grid grid-cols-3 gap-2">
+                                {stats.map((stat, idx) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.8 + idx * 0.1 }}
+                                        className="bg-white rounded-xl p-3 shadow-lg border border-amber-100 text-center min-w-[70px]"
+                                    >
+                                        <stat.icon className="w-4 h-4 text-amber-500 mx-auto mb-1" />
+                                        <p className="text-lg font-black text-stone-800">{stat.number}</p>
+                                        <p className="text-xs text-stone-500 leading-tight">{stat.label}</p>
+                                    </motion.div>
+                                ))}
+                            </div>
+
+                            {/* Quote Card */}
+                            <motion.div
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 1.2 }}
+                                className="absolute -top-8 -left-4 lg:-left-16 bg-white rounded-2xl p-4 shadow-xl border border-amber-100 max-w-xs hidden lg:block"
+                            >
+                                <FaQuoteLeft className="w-6 h-6 text-amber-400 mb-2" />
+                                <p className="text-sm text-stone-600 italic mb-3">
+                                    "Every thread tells a story of sustainability and craftsmanship."
+                                </p>
+                                <div className="flex items-center gap-2">
+                                    <img src="https://i.pravatar.cc/32?img=25" className="w-8 h-8 rounded-full" alt="Testimonial" />
+                                    <div>
+                                        <p className="text-xs font-bold text-stone-800">Sarah Chen</p>
+                                        <p className="text-xs text-stone-500">Designer</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </div>
                     </motion.div>
 
-                    {/* CTA Buttons */}
+                    {/* Content Section - Bottom on mobile, Left on desktop */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 1.1 }}
-                        className="flex flex-col sm:flex-row gap-4"
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="lg:col-span-5 lg:order-1 text-center lg:text-left px-4 lg:px-0 pb-16 lg:pb-0"
                     >
-                        <motion.button
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 flex items-center justify-center gap-3"
-                        >
-                            <span>Explore Natural Collection</span>
-                            <FaArrowRight className="w-5 h-5" />
-                        </motion.button>
-                        
-                        <motion.button
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            className="border-2 border-amber-600 text-amber-700 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-amber-50 transition-all duration-300 flex items-center justify-center gap-3"
-                        >
-                            <FaMountain className="w-5 h-5" />
-                            <span>Our Earth Story</span>
-                        </motion.button>
-                    </motion.div>
-                </motion.div>
-
-                {/* Right Content - Visual */}
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="relative"
-                >
-                    {/* Main Product Image */}
-                    <div className="relative">
+                        {/* Badge */}
                         <motion.div
-                            animate={{ 
-                                y: [0, -10, 0],
-                                rotate: [0, 1, -1, 0]
-                            }}
-                            transition={{ 
-                                duration: 6, 
-                                repeat: Infinity,
-                                repeatType: "reverse"
-                            }}
-                            className="relative z-10"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 rounded-full mb-6"
                         >
-                            <div className="aspect-square rounded-full overflow-hidden shadow-2xl border-8 border-white/50 backdrop-blur-sm">
-                                <img
-                                    src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80"
-                                    alt="Natural Terra Verde Products"
-                                    className="w-full h-full object-cover"
+                            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                            <span className="text-sm font-bold text-amber-700">Crafted with Purpose</span>
+                        </motion.div>
+
+                        {/* Main Heading */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="mb-6"
+                        >
+                            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-stone-800 leading-tight mb-2">
+                                Terra Verde
+                            </h1>
+                            <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-stone-600">
+                                Fashion That's{' '}
+                                <TypewriterText 
+                                    words={typewriterWords}
+                                    className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600"
                                 />
                             </div>
                         </motion.div>
 
-                        {/* Orbiting Elements */}
+                        {/* Description */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="text-lg text-stone-500 leading-relaxed mb-8 max-w-lg lg:max-w-none"
+                        >
+                            Where ancient wisdom meets modern innovation. Each piece is thoughtfully designed 
+                            by skilled artisans who pour their heritage into every stitch.
+                        </motion.p>
+
+                        {/* Features Pills */}
                         <motion.div
-                            animate={{ rotate: 360 }}
-                            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                            className="absolute inset-0"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="flex flex-wrap justify-center lg:justify-start gap-2 mb-8"
                         >
                             {[
-                                { Icon: FaWater, angle: 0, color: 'text-blue-500' },
-                                { Icon: FaLeaf, angle: 90, color: 'text-green-500' },
-                                { Icon: FaMountain, angle: 180, color: 'text-gray-600' },
-                                { Icon: FaSeedling, angle: 270, color: 'text-amber-500' }
-                            ].map(({ Icon, angle, color }, index) => (
-                                <motion.div
-                                    key={index}
-                                    className="absolute w-16 h-16 flex items-center justify-center"
-                                    style={{
-                                        top: '50%',
-                                        left: '50%',
-                                        transformOrigin: '0 0',
-                                        transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-200px) rotate(-${angle}deg)`
-                                    }}
-                                    animate={{ rotate: -360 }}
-                                    transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                                { icon: FaRecycle, text: 'Eco-Friendly' },
+                                { icon: FaHeart, text: 'Handmade' },
+                                { icon: FaShippingFast, text: 'Carbon Neutral' }
+                            ].map((feature, idx) => (
+                                <div 
+                                    key={idx}
+                                    className="flex items-center gap-2 px-4 py-2 bg-white rounded-full border border-stone-200 shadow-sm"
                                 >
-                                    <div className={`w-12 h-12 bg-white/90 rounded-full flex items-center justify-center shadow-lg ${color}`}>
-                                        <Icon className="w-6 h-6" />
-                                    </div>
-                                </motion.div>
+                                    <feature.icon className="w-4 h-4 text-amber-500" />
+                                    <span className="text-sm font-medium text-stone-600">{feature.text}</span>
+                                </div>
                             ))}
                         </motion.div>
 
-                        {/* Background Decorative Circle */}
-                        <div className="absolute inset-0 -z-10">
-                            <div className="w-full h-full rounded-full bg-gradient-to-br from-amber-200/30 via-orange-200/20 to-yellow-200/30 blur-3xl transform scale-110" />
-                        </div>
-                    </div>
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.8 }}
+                            className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start mb-8"
+                        >
+                            <Link
+                                to="/builder"
+                                className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-2xl shadow-xl shadow-amber-500/25 hover:shadow-2xl hover:shadow-amber-500/30 hover:scale-105 transition-all duration-300"
+                            >
+                                Discover Collection
+                                <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            
+                            <button className="group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-4 bg-white/80 backdrop-blur border-2 border-stone-200 text-stone-700 font-semibold rounded-2xl hover:bg-white hover:border-amber-300 hover:text-amber-700 transition-all">
+                                <FaPlay className="w-4 h-4" />
+                                Our Story
+                            </button>
+                        </motion.div>
 
-                    {/* Additional Product Cards */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.5 }}
-                        className="absolute -bottom-8 -left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-amber-100"
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full overflow-hidden">
-                                <img
-                                    src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=100&q=80"
-                                    alt="Handcrafted Soap"
-                                    className="w-full h-full object-cover"
-                                />
+                        {/* Trust Indicators */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.9 }}
+                            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 pt-6 border-t border-stone-200"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div className="flex -space-x-2">
+                                    {[1,2,3,4].map((i) => (
+                                        <img 
+                                            key={i}
+                                            src={`https://i.pravatar.cc/32?img=${i+35}`} 
+                                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
+                                            alt="Customer"
+                                        />
+                                    ))}
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-bold text-stone-800 text-sm">2,500+</p>
+                                    <p className="text-xs text-stone-500">Happy Customers</p>
+                                </div>
                             </div>
-                            <div>
-                                <div className="font-bold text-sm text-gray-800">Handcrafted Soaps</div>
-                                <div className="text-xs text-amber-600">Made with love</div>
+                            
+                            <div className="flex items-center gap-2">
+                                <div className="flex">
+                                    {[1,2,3,4,5].map((i) => (
+                                        <FaStar key={i} className="w-4 h-4 text-amber-400" />
+                                    ))}
+                                </div>
+                                <div className="text-left">
+                                    <p className="font-bold text-stone-800 text-sm">4.9</p>
+                                    <p className="text-xs text-stone-500">Rating</p>
+                                </div>
                             </div>
-                        </div>
+                        </motion.div>
                     </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.7 }}
-                        className="absolute -top-8 -right-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-orange-100"
-                    >
-                        <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full overflow-hidden">
-                                <img
-                                    src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=100&q=80"
-                                    alt="Natural Oils"
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            <div>
-                                <div className="font-bold text-sm text-gray-800">Essential Oils</div>
-                                <div className="text-xs text-orange-600">Pure & organic</div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </motion.div>
-            </div>
-
-            {/* Bottom Wave */}
-            <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
-                <svg className="relative block w-full h-20" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                    <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1200,60 L1200,120 L0,120 Z" 
-                          className="fill-white"></path>
-                </svg>
+                </div>
             </div>
         </section>
     );

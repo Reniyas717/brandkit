@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaShoppingCart, FaHeart, FaStar } from 'react-icons/fa';
+import { FaEye, FaHeart, FaStar } from 'react-icons/fa';
 
 const CuratedCollectionsSection = ({ products }) => {
     const [hoveredCard, setHoveredCard] = useState(null);
@@ -107,8 +107,8 @@ const CuratedCollectionsSection = ({ products }) => {
                                         whileTap={{ scale: 0.95 }}
                                         className="px-8 py-4 bg-white text-gray-900 rounded-full font-bold text-sm hover:bg-emerald-500 hover:text-white transition-colors duration-300 shadow-xl flex items-center gap-2"
                                     >
-                                        <FaShoppingCart className="w-4 h-4" />
-                                        Add to Cart
+                                        <FaEye className="w-4 h-4" />
+                                        View Product
                                     </motion.button>
                                 </motion.div>
                             </div>
@@ -173,7 +173,7 @@ const CuratedCollectionsSection = ({ products }) => {
                                             whileTap={{ scale: 0.9 }}
                                             className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center text-white hover:bg-emerald-600 transition-colors shadow-lg"
                                         >
-                                            <FaShoppingCart className="w-4 h-4" />
+                                            <FaEye className="w-4 h-4" />
                                         </motion.button>
                                     </div>
                                 </div>
@@ -231,8 +231,8 @@ const CuratedCollectionsSection = ({ products }) => {
                                         whileTap={{ scale: 0.95 }}
                                         className="w-full py-3 bg-white text-gray-900 rounded-xl font-bold text-sm hover:bg-emerald-500 hover:text-white transition-colors duration-300 flex items-center justify-center gap-2 shadow-lg"
                                     >
-                                        <FaShoppingCart className="w-4 h-4" />
-                                        Quick Add
+                                        <FaEye className="w-4 h-4" />
+                                        View
                                     </motion.button>
                                 </motion.div>
 

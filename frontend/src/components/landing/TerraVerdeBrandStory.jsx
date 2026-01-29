@@ -1,192 +1,117 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaLeaf, FaHeart, FaMountain, FaUsers, FaAward, FaSeedling } from 'react-icons/fa';
-import { RiEarthFill } from 'react-icons/ri';
+import { FaLeaf, FaHeart, FaGlobeAmericas, FaHandHoldingHeart, FaQuoteLeft } from 'react-icons/fa';
 
 const TerraVerdeBrandStory = () => {
     const values = [
-        {
-            icon: FaSeedling,
-            title: 'Organic Heritage',
-            description: 'Rooted in generations of traditional farming wisdom, bringing authentic organic practices to modern life.',
-            color: 'from-amber-500 to-orange-600'
-        },
-        {
-            icon: FaHeart,
-            title: 'Artisan Crafted',
-            description: 'Each product is lovingly handmade by skilled artisans who pour their passion into every detail.',
-            color: 'from-rose-500 to-pink-600'
-        },
-        {
-            icon: FaMountain,
-            title: 'Earth Connected',
-            description: 'Sourced from pristine natural landscapes, maintaining the purest connection to Mother Earth.',
-            color: 'from-stone-500 to-slate-600'
-        },
-        {
-            icon: FaUsers,
-            title: 'Community First',
-            description: 'Supporting local farming communities and preserving traditional knowledge for future generations.',
-            color: 'from-emerald-500 to-teal-600'
-        }
+        { icon: FaLeaf, title: 'Sustainable', description: 'Every product designed with the planet in mind', color: 'from-amber-400 to-orange-500' },
+        { icon: FaHeart, title: 'Ethical', description: 'Fair wages and safe conditions for all workers', color: 'from-orange-400 to-red-400' },
+        { icon: FaGlobeAmericas, title: 'Transparent', description: 'Full supply chain visibility from farm to closet', color: 'from-amber-500 to-yellow-500' },
+        { icon: FaHandHoldingHeart, title: 'Community', description: 'Supporting artisan communities worldwide', color: 'from-orange-500 to-amber-500' }
     ];
 
     return (
-        <section className="py-24 bg-gradient-to-br from-amber-50/40 via-white to-orange-50/40 relative overflow-hidden">
-            {/* Enhanced Background Pattern */}
-            <div className="absolute inset-0 opacity-30">
-                <div className="absolute inset-0" style={{
-                    backgroundImage: `
-                        radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(234, 88, 12, 0.1) 0%, transparent 50%),
-                        linear-gradient(45deg, transparent 30%, rgba(217, 119, 6, 0.05) 50%, transparent 70%)
-                    `
-                }} />
-            </div>
+        <section id="story" className="py-24 bg-gradient-to-b from-amber-50/50 to-[#FFFBF5] relative overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute top-20 left-10 w-64 h-64 bg-amber-100/50 rounded-full blur-3xl" />
+            <div className="absolute bottom-20 right-10 w-80 h-80 bg-orange-100/50 rounded-full blur-3xl" />
             
-            {/* Floating Elements */}
-            <div className="absolute top-20 left-10 w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
-            <div className="absolute top-32 right-20 w-3 h-3 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.5s' }} />
-            <div className="absolute bottom-40 left-20 w-1.5 h-1.5 bg-yellow-400 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-
-            <div className="container mx-auto px-8 relative z-10">
-                {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-16"
-                >
-                    <span className="inline-block px-6 py-2 bg-amber-100 text-amber-700 rounded-full text-sm font-bold uppercase tracking-wider mb-4">
-                        Our Heritage
-                    </span>
-                    <h2 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-gray-900 via-amber-800 to-orange-600 bg-clip-text text-transparent">
-                        Rooted in Nature's Wisdom
-                    </h2>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                        For three generations, we've been guardians of ancient earth wisdom, crafting products that honor 
-                        both tradition and the planet's natural rhythms.
-                    </p>
-                </motion.div>
-
-                {/* Founder Story */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="grid md:grid-cols-2 gap-12 items-center mb-24"
-                >
-                    <div className="relative">
-                        <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    {/* Image Side */}
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="relative"
+                    >
+                        <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-amber-900/10">
                             <img
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80"
-                                alt="Terra Verde Founder"
-                                className="w-full h-full object-cover"
+                                src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=500&fit=crop"
+                                alt="Sustainable craftsmanship"
+                                className="w-full h-[450px] object-cover"
                             />
+                            <div className="absolute inset-0 bg-gradient-to-t from-amber-900/40 to-transparent" />
                         </div>
-                        <div className="absolute -bottom-6 -right-6 bg-gradient-to-br from-amber-500 to-orange-600 text-white p-8 rounded-2xl shadow-xl max-w-xs">
-                            <div className="text-4xl font-black mb-2">1952</div>
-                            <div className="text-sm opacity-90">Three generations of earth stewardship</div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h3 className="text-3xl font-black text-gray-900 mb-6">
-                            From Ancient Soil to Modern Soul
-                        </h3>
-                        <div className="space-y-4 text-gray-600 leading-relaxed">
-                            <p>
-                                Our story began in the volcanic soils of Guatemala, where my grandfather taught me that the earth 
-                                holds secrets older than memory. He showed me how to read the language of plants, the rhythm of seasons, 
-                                and the sacred relationship between humanity and nature.
-                            </p>
-                            <p>
-                                Terra Verde was born from this ancient wisdom, combined with a modern mission to share these 
-                                time-honored practices with the world. Every product we create carries the essence of this connection—
-                                pure, authentic, and deeply rooted in respect for our planet.
-                            </p>
-                            <p className="font-bold text-amber-700">
-                                "The earth provides everything we need, if we listen with humble hearts."
-                            </p>
-                            <div className="pt-4">
-                                <div className="font-bold text-gray-900">Miguel Herrera</div>
-                                <div className="text-sm text-gray-500">Founder & Chief Earth Keeper</div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-
-                {/* Core Values */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mb-24"
-                >
-                    <h3 className="text-4xl font-black text-center text-gray-900 mb-12">
-                        Our Sacred Values
-                    </h3>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {values.map((value, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                whileHover={{ y: -8 }}
-                                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 group"
-                            >
-                                <div className={`w-14 h-14 bg-gradient-to-br ${value.color} rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                                    <value.icon className="w-7 h-7 text-white" />
-                                </div>
-                                <h4 className="text-xl font-black text-gray-900 mb-3">{value.title}</h4>
-                                <p className="text-gray-600 text-sm leading-relaxed">{value.description}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                {/* Call to Action */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center"
-                >
-                    <div className="bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 rounded-3xl p-12 shadow-2xl relative overflow-hidden">
-                        {/* Decorative elements */}
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16" />
-                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full -ml-12 -mb-12" />
                         
-                        <div className="relative z-10">
-                            <motion.div
-                                initial={{ scale: 0 }}
-                                whileInView={{ scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ type: 'spring', bounce: 0.4 }}
-                                className="inline-flex items-center gap-3 mb-6"
-                            >
-                                <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-                                    <RiEarthFill className="w-8 h-8 text-white" />
-                                </div>
-                                <h3 className="text-4xl font-black text-white">Honor the Earth</h3>
-                            </motion.div>
-                            <p className="text-2xl text-white/90 leading-relaxed font-medium mb-8 max-w-3xl mx-auto">
-                                Experience the wisdom of generations—where ancient traditions meet modern consciousness. 
-                                <span className="text-yellow-300 font-black">Ready to reconnect with nature?</span>
+                        {/* Floating Quote Card */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-6 shadow-xl border border-amber-100 max-w-xs"
+                        >
+                            <FaQuoteLeft className="w-8 h-8 text-amber-400 mb-3" />
+                            <p className="text-stone-600 text-sm italic leading-relaxed">
+                                "Fashion should never cost the earth. We create beauty that empowers communities."
                             </p>
-                            <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="bg-white text-amber-600 px-8 py-4 rounded-2xl font-black text-lg shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center gap-3"
-                            >
-                                <span>Discover Natural Wisdom</span>
-                                <FaMountain className="w-5 h-5" />
-                            </motion.button>
+                            <div className="mt-4 flex items-center gap-3">
+                                <img src="https://i.pravatar.cc/40?img=32" className="w-10 h-10 rounded-full" alt="Founder" />
+                                <div>
+                                    <p className="font-bold text-stone-800 text-sm">James Rodriguez</p>
+                                    <p className="text-xs text-stone-500">Founder</p>
+                                </div>
+                            </div>
+                        </motion.div>
+
+                        {/* Floating Stat */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.5 }}
+                            className="absolute -top-4 -left-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl p-4 shadow-xl text-white"
+                        >
+                            <p className="text-3xl font-black">8+</p>
+                            <p className="text-xs opacity-90">Years of Impact</p>
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Content Side */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="space-y-8"
+                    >
+                        <div>
+                            <span className="inline-flex items-center gap-2 px-3 py-1 bg-amber-100 rounded-full text-xs font-semibold text-amber-700 mb-4">
+                                Our Story
+                            </span>
+                            <h2 className="text-3xl lg:text-4xl font-black text-stone-800 mb-4">
+                                Fashion That <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-500">Gives Back</span>
+                            </h2>
+                            <p className="text-stone-600 leading-relaxed">
+                                Born from a simple belief that style shouldn't cost the earth. Terra Verde 
+                                partners with artisan communities across the globe to create beautiful, 
+                                sustainable fashion that empowers makers and respects our planet.
+                            </p>
                         </div>
-                    </div>
-                </motion.div>
+
+                        {/* Values Grid */}
+                        <div className="grid grid-cols-2 gap-4">
+                            {values.map((value, index) => (
+                                <motion.div
+                                    key={value.title}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1 }}
+                                    className="flex items-start gap-3 p-4 bg-white rounded-2xl border border-amber-100 hover:border-amber-200 hover:shadow-lg transition-all"
+                                >
+                                    <div className={`w-10 h-10 bg-gradient-to-br ${value.color} rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg`}>
+                                        <value.icon className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-stone-800 font-bold text-sm">{value.title}</h4>
+                                        <p className="text-stone-500 text-xs leading-relaxed">{value.description}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
             </div>
         </section>
     );

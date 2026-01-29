@@ -1,40 +1,105 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaSeedling, FaWater, FaRecycle } from 'react-icons/fa';
+import { FaLeaf, FaWater, FaRecycle, FaTruck, FaShieldAlt, FaUsers } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const TransparencySection = () => {
-    return (
-        <section className="relative py-24 overflow-hidden bg-white">
-            <div className="absolute inset-0 bg-emerald-50/50 -skew-y-3 transform origin-top-left scale-110" />
-            <div className="relative z-10 max-w-6xl mx-auto px-4">
-                <div className="text-center mb-16">
-                    <span className="text-emerald-600 font-bold uppercase tracking-widest text-sm">Transparency</span>
-                    <h2 className="text-5xl font-black text-gray-900 mt-2 mb-6">From Nature to You</h2>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">Every step of our process is designed to minimize footprint and maximize positive impact.</p>
-                </div>
+    const supplyChain = [
+        {
+            step: '01',
+            title: 'Sourcing',
+            location: 'Organic Farms',
+            description: 'We partner directly with organic farms to ensure regenerative practices.',
+            icon: FaLeaf,
+            color: 'from-emerald-500 to-teal-500'
+        },
+        {
+            step: '02',
+            title: 'Production',
+            location: 'Zero-Waste Facilities',
+            description: 'Zero-waste manufacturing powered by 100% renewable energy.',
+            icon: FaWater,
+            color: 'from-teal-500 to-cyan-500'
+        },
+        {
+            step: '03',
+            title: 'Lifecycle',
+            location: 'Circular Design',
+            description: 'Designed for longevity and fully recyclable at end of life.',
+            icon: FaRecycle,
+            color: 'from-cyan-500 to-emerald-500'
+        }
+    ];
 
-                <div className="grid md:grid-cols-3 gap-8">
-                    {[
-                        { icon: FaSeedling, title: "Sourcing", desc: "We partner directly with organic farms to ensure regenerative practices.", step: "01" },
-                        { icon: FaWater, title: "Production", desc: "Zero-waste manufacturing powered by 100% renewable energy.", step: "02" },
-                        { icon: FaRecycle, title: "Lifecycle", desc: "Designed for longevity and fully recyclable at end of life.", step: "03" }
-                    ].map((item, i) => (
-                        <div key={i} className="relative group">
-                            <div className="absolute -top-6 -left-6 text-[80px] font-black text-emerald-900/5 select-none transition-transform group-hover:scale-110 duration-500">
+    return (
+        <section className="py-24 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute inset-0">
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
+                <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl" />
+            </div>
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+                {/* Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                >
+                    <span className="inline-block px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-sm font-semibold text-emerald-400 mb-4">
+                        TRANSPARENCY
+                    </span>
+                    <h2 className="text-3xl lg:text-4xl font-black text-white mb-4">
+                        From <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Nature to You</span>
+                    </h2>
+                    <p className="text-slate-300 max-w-2xl mx-auto">
+                        Every step of our process is designed to minimize footprint and maximize positive impact.
+                    </p>
+                </motion.div>
+
+                {/* Supply Chain Steps */}
+                <div className="grid md:grid-cols-3 gap-6 mb-12">
+                    {supplyChain.map((item, index) => (
+                        <motion.div
+                            key={item.step}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            whileHover={{ y: -5 }}
+                            className="relative bg-slate-800/50 backdrop-blur-sm rounded-3xl p-8 border border-slate-700/50 hover:border-emerald-500/30 transition-all duration-300 group"
+                        >
+                            <span className="absolute top-6 right-6 text-6xl font-black text-slate-700/30 group-hover:text-emerald-500/10 transition-colors">
                                 {item.step}
+                            </span>
+                            
+                            <div className={`w-16 h-16 bg-gradient-to-br ${item.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20`}>
+                                <item.icon className="w-8 h-8 text-white" />
                             </div>
-                            <div className="relative bg-white p-8 rounded-[1.5rem] border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-emerald-600 transition-colors duration-300">
-                                    <item.icon className="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors duration-300" />
-                                </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">{item.title}</h3>
-                                <p className="text-sm text-gray-600 leading-relaxed">
-                                    {item.desc}
-                                </p>
-                            </div>
-                        </div>
+                            
+                            <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+                            <p className="text-sm text-emerald-400 font-medium mb-3">{item.location}</p>
+                            <p className="text-sm text-slate-300 leading-relaxed">{item.description}</p>
+                        </motion.div>
                     ))}
                 </div>
+
+                {/* CTA */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center"
+                >
+                    <Link
+                        to="/about"
+                        className="group inline-flex items-center gap-2 px-6 py-3 bg-slate-800/50 hover:bg-slate-700/50 text-slate-300 hover:text-emerald-400 font-semibold rounded-xl border border-slate-600/50 hover:border-emerald-500/50 transition-all"
+                    >
+                        Learn More About Our Process
+                        <FaShieldAlt className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                    </Link>
+                </motion.div>
             </div>
         </section>
     );
