@@ -1,262 +1,248 @@
-# Brand Kit - Full Stack Project
+<div align="center">
 
-A hyper-modern subscription kit platform with motion-dense UI and comprehensive backend API.
+# BrandKit — Subscription Kit Platform
 
-## Project Overview
+[![Subscription Platform](https://img.shields.io/badge/Subscription%20Platform-Online-95e1d3?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Reniyas717/brandkit)
+[![React](https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Visit%20App-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://brandkit-reniyas.vercel.app)
+</div>
 
-This project implements a complete branding and subscription system with:
-- Immersive brand storytelling experiences
-- Interactive 3D product exploration
-- Drag-and-drop subscription kit builder
-- PostgreSQL database with complete relational schema
-- RESTful API with Express.js
-- React frontend with advanced animations
+---
 
-## Project Structure
+## Technology Stack
+
+<div align="center">
+
+![React](https://img.shields.io/badge/React-19.x-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-5.x-646cff?style=for-the-badge&logo=vite&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-State-222222?style=for-the-badge)
+
+</div>
+
+## Overview
+
+BrandKit is a hyper-modern, full-stack subscription kit platform that enables brands to tell their story and customers to curate personalized product subscriptions. Built with a motion-dense UI and comprehensive backend API, the platform supports immersive brand experiences, interactive 3D product exploration, and a drag-and-drop kit builder.
+
+Repository structure (high level):
 
 ```
-brand-kit/
-├── backend/                 # Node.js + Express API
-│   ├── src/
-│   │   ├── config/         # Database & environment config
-│   │   ├── database/       # Schema & seed files
-│   │   ├── models/         # Data models
-│   │   ├── controllers/    # Business logic
-│   │   ├── routes/         # API endpoints
-│   │   ├── middleware/     # Error handling & validation
-│   │   ├── utils/          # Helper functions
-│   │   ├── app.js          # Express app
-│   │   └── server.js       # Entry point
-│   ├── .env.example
-│   ├── package.json
-│   └── README.md
-│
-├── frontend/               # React + Vite application
-│   ├── src/
-│   │   ├── pages/         # Main application pages
-│   │   ├── components/    # Reusable UI components (to be created)
-│   │   ├── services/      # API client layer
-│   │   ├── store/         # Zustand state management
-│   │   ├── hooks/         # Custom React hooks
-│   │   ├── utils/         # Utilities & animations
-│   │   ├── styles/        # Global styles
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── .env.example
-│   ├── package.json
-│   └── README.md
-│
-└── Context.md             # Database schema documentation
+brandkit/
+├── backend/        # Node.js + Express API, models, and controllers
+├── frontend/       # React + Vite dashboard and public UI
+└── README.md       # <-- you are here
 ```
+
+### Key Features
+
+- **Immersive Brand Storytelling** — Rich narrative experiences for brand discovery with scroll-driven parallax
+- **Interactive 3D Product Exploration** — Immersive product visualizations with floating cards and depth effects
+- **Drag-and-Drop Kit Builder** — Intuitive, no-code subscription kit customization
+- **Complete Data-Driven Architecture** — Brands, products, and kits fully managed via RESTful API
+- **Motion-Dense UI** — Advanced animations and transitions using Framer Motion
+- **Relational Database Design** — PostgreSQL schema with normalized brand–product–kit relationships
+- **Real-time State Management** — Zustand for predictable and efficient state handling
+- **Secure & Scalable API** — Express.js with middleware for validation, error handling, and security
+
+## Live Demo
+
+Check out the live application here:
+- **Frontend:** [brandkit-reniyas.vercel.app](https://brandkit-reniyas.vercel.app)
 
 ## Quick Start
 
-### Backend Setup
+These instructions will get a local copy running for development and testing.
 
-1. **Install dependencies**:
-   ```bash
-   cd backend
-   npm install
-   ```
+### Prerequisites
 
-2. **Configure environment**:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database credentials
-   ```
+- Node.js v18+ and npm
+- PostgreSQL (local or cloud-hosted)
+- Git
 
-3. **Setup database**:
-   ```bash
-   # Create database
-   psql -U postgres -c "CREATE DATABASE brandkit;"
-   
-   # Run schema
-   npm run db:setup
-   
-   # Seed data
-   npm run db:seed
-   ```
+### Backend (API)
 
-4. **Start server**:
-   ```bash
-   npm run dev
-   ```
-   Server runs on http://localhost:5000
+1. Open a terminal and install dependencies:
 
-### Frontend Setup
+```bash
+cd backend
+npm install
+```
 
-1. **Install dependencies**:
-   ```bash
-   cd frontend
-   npm install
-   ```
+2. Create a `.env` file in `backend/` with the following variables:
 
-2. **Install additional packages**:
-   ```bash
-   npm install framer-motion zustand react-router-dom
-   ```
+```
+PORT=5000
+DATABASE_URL=postgres://user:password@localhost:5432/brandkit
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=brandkit
+DATABASE_USER=postgres
+DATABASE_PASSWORD=your_password
+NODE_ENV=development
+```
 
-3. **Configure environment**:
-   ```bash
-   cp .env.example .env
-   ```
+3. Setup the database:
 
-4. **Start development server**:
-   ```bash
-   npm run dev
-   ```
-   App runs on http://localhost:5173
+```bash
+# Create the database
+psql -U postgres -c "CREATE DATABASE brandkit;"
 
-## API Endpoints
+# Run schema and seed data
+npm run db:setup
+npm run db:seed
+```
 
-### Brands
-- `GET /api/v1/brands` - List all brands
-- `GET /api/v1/brands/:id` - Get brand details
-- `GET /api/v1/brands/:id/details` - Get brand with products & sustainability
-- `GET /api/v1/brands/:id/products` - Get brand products
-- `GET /api/v1/brands/:id/sustainability` - Get sustainability tags
+4. Start the backend server in development mode:
 
-### Products
-- `GET /api/v1/products` - List products (with filters)
-- `GET /api/v1/products/:id` - Get product details
-- `GET /api/v1/products/:id/details` - Get product with metadata
+```bash
+npm run dev
+```
 
-### Subscription Kits
-- `POST /api/v1/kits/initialize` - Create/get draft kit
-- `GET /api/v1/kits/frequencies` - Get delivery frequencies
-- `GET /api/v1/kits/:kitId` - Get kit summary
-- `POST /api/v1/kits/:kitId/items` - Add product to kit
-- `PATCH /api/v1/kits/:kitId/items/:productId` - Update quantity
-- `DELETE /api/v1/kits/:kitId/items/:productId` - Remove item
-- `PATCH /api/v1/kits/:kitId/frequency` - Set delivery frequency
-- `POST /api/v1/kits/:kitId/confirm` - Confirm kit
+The server runs on `http://localhost:5000`. Entry point is `backend/server.js`.
 
-## Database Schema
+### Frontend (Web App)
 
-### Core Tables
-- **users** - User accounts
-- **brands** - Partner brands
-- **brand_sustainability_tags** - Sustainability attributes
-- **products** - Sellable items
-- **product_metadata** - Product attributes
-- **delivery_frequencies** - Delivery intervals
-- **subscription_kits** - User-created kits
-- **subscription_kit_items** - Kit products
-- **kit_activity_log** - Kit lifecycle events
+1. Install dependencies and run the dev server:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+2. The frontend uses Vite and React sources are in `frontend/src/`.
+
+The app runs on `http://localhost:5173`.
+
+## Project Details & Notable Files
+
+**Backend:**
+- `backend/server.js` — Express app, middleware setup, and route mounting
+- `backend/src/controllers/` — Business logic handlers for brands, products, and subscription kits
+- `backend/src/models/` — Data models (Brand, Product, SubscriptionKit, DeliveryFrequency)
+- `backend/src/routes/` — Route definitions (brands, products, kits)
+- `backend/src/database/schema.sql` — PostgreSQL schema definition
+- `backend/src/database/seeds.sql` — Initial data for brands and products
+- `backend/src/middleware/` — Auth validation, error handling, and request validation
+- `backend/src/utils/responseFormatter.js` — Standardized API response formatting
+
+**Frontend:**
+- `frontend/src/pages/` — Main application pages (BrandExperience, ProductExploration, KitBuilder, KitReview)
+- `frontend/src/components/` — Reusable UI and animation components
+- `frontend/src/services/api.js` — API client layer for backend communication
+- `frontend/src/store/kitStore.js` — Zustand state management for kit data
+- `frontend/src/hooks/` — Custom React hooks (useBrand, useKit, useProducts)
+- `frontend/src/utils/animations.js` — Animation utilities and helpers
+
+**Documentation:**
+- `Context.md` — Complete database schema documentation
+
+## API Endpoints (Selected)
+
+Below are common endpoints found in `backend/routes/`. Consult route files for the complete list and exact payloads.
+
+**Brands:**
+
+```
+GET  /api/v1/brands                      # List all brands
+GET  /api/v1/brands/:id                  # Get brand details
+GET  /api/v1/brands/:id/details          # Get brand with products & sustainability
+GET  /api/v1/brands/:id/products         # Get brand products
+GET  /api/v1/brands/:id/sustainability   # Get sustainability tags
+```
+
+**Products:**
+
+```
+GET  /api/v1/products                    # List products (with filters)
+GET  /api/v1/products/:id                # Get product details
+GET  /api/v1/products/:id/details        # Get product with metadata
+```
+
+**Subscription Kits:**
+
+```
+POST /api/v1/kits/initialize             # Create/get draft kit
+GET  /api/v1/kits/frequencies            # Get delivery frequencies
+GET  /api/v1/kits/:kitId                 # Get kit summary
+POST /api/v1/kits/:kitId/items           # Add product to kit
+PATCH /api/v1/kits/:kitId/items/:productId  # Update quantity
+DELETE /api/v1/kits/:kitId/items/:productId # Remove item
+PATCH /api/v1/kits/:kitId/frequency      # Set delivery frequency
+POST /api/v1/kits/:kitId/confirm         # Confirm kit
+```
+
+## Database Schema Overview
+
+**Core Tables:**
+- `users` — Platform user accounts
+- `brands` — Partner brands with storytelling data
+- `brand_sustainability_tags` — Sustainability attributes linked to brands
+- `products` — Sellable items belonging to brands
+- `product_metadata` — Product attributes (size, material, etc.)
+- `delivery_frequencies` — Allowed delivery intervals
+- `subscription_kits` — User-created kit configurations
+- `subscription_kit_items` — Products added to kits with quantities
+- `kit_activity_log` — Lifecycle events and activity tracking
+
+**Key Relationships:**
+- One brand owns many products
+- One user owns many subscription kits
+- One subscription kit contains many products via kit items
+- Sustainability tags and metadata extend brands and products
 
 See `Context.md` for detailed schema documentation.
 
-## Frontend Pages
+## Environment Config & Secrets
 
-### 1. Brand Experience (`/brand/:slug`)
-Immersive storytelling with:
-- Scroll-driven 3D camera movement
-- Parallax narrative layers
-- Floating brand identity
-- Contextual product showcase
+We recommend creating a `.env.example` file with all required variables (without secrets) and committing that to the repo. Keep real secrets out of source control and use a secrets manager in production (GitHub Actions secrets, Vercel environment variables, etc.).
 
-### 2. Product Exploration (`/products`)
-Interactive product browsing with:
-- 3D floating product cards
-- Depth-based carousel
-- Cursor proximity effects
-- Shared-layout animations
+**Backend `.env.example`:**
 
-### 3. Kit Builder (`/kit/build`)
-Subscription kit creation with:
-- Glassmorphic floating panel
-- Drag-and-drop interactions
-- Magnetic snapping
-- Animated controls
+```
+PORT=5000
+DATABASE_URL=postgres://user:password@localhost:5432/brandkit
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_NAME=brandkit
+DATABASE_USER=postgres
+DATABASE_PASSWORD=
+NODE_ENV=development
+```
 
-### 4. Kit Review (`/kit/review`)
-Confirmation flow with:
-- Staggered animations
-- Rolling price counters
-- State morphing
-- Success transformation
+**Frontend `.env.example`:**
 
-## Design Principles
+```
+VITE_API_URL=http://localhost:5000/api/v1
+```
 
-### Motion & Interaction
-- Scroll-linked, physics-based, or state-driven animations
-- Cursor influences UI elements
-- Staggered motion for clarity
-- No fade-only animations
+## Running Tests
 
-### 3D & Spatial Design
-- Perspective and Z-axis layering
-- Depth shadows and scaling
-- Camera-like transitions
-- Active elements move forward
+If tests are present, run them with:
 
-### Visual Density
-- Always subtle motion present
-- Ambient idle animations
-- No static visual zones
-- Premium, state-of-the-art feel
+```bash
+cd backend
+npm test
 
-## Tech Stack
+cd ../frontend
+npm test
+```
 
-### Backend
-- Node.js + Express.js
-- PostgreSQL
-- Joi validation
-- Helmet security
-- Morgan logging
 
-### Frontend
-- React 18
-- Vite
-- Framer Motion
-- Zustand
-- React Router DOM
-- shadcn/ui (to be integrated)
-- Three.js / React Three Fiber (to be integrated)
+## Support
 
-## Development Workflow
+For support or questions, open an issue in this repository.
 
-1. **Backend Development**
-   - Define models in `src/models/`
-   - Implement controllers in `src/controllers/`
-   - Create routes in `src/routes/`
-   - Test with Postman or similar
+---
 
-2. **Frontend Development**
-   - Create components in `src/components/`
-   - Implement pages in `src/pages/`
-   - Add services in `src/services/`
-   - Style with CSS and Framer Motion
+<div align="center">
 
-3. **Database Changes**
-   - Update `src/database/schema.sql`
-   - Run `npm run db:reset` in backend
-   - Update models as needed
+**Built with ❤️ for modern e-commerce experiences**
 
-## Next Steps
+[![GitHub Stars](https://img.shields.io/github/stars/Reniyas717/brandkit?style=social)](https://github.com/Reniyas717/brandkit)
+[![GitHub Forks](https://img.shields.io/github/forks/Reniyas717/brandkit?style=social)](https://github.com/Reniyas717/brandkit/network/members)
 
-### Backend
-- [ ] Implement user authentication (JWT)
-- [ ] Add payment processing
-- [ ] Create order management
-- [ ] Add analytics endpoints
-- [ ] Implement email notifications
-
-### Frontend
-- [ ] Implement 3D product visualization
-- [ ] Create interactive kit builder UI
-- [ ] Add scroll-driven animations
-- [ ] Integrate shadcn/ui components
-- [ ] Implement drag-and-drop
-- [ ] Add WebGL effects
-- [ ] Create responsive layouts
-
-### Testing
-- [ ] Backend API tests
-- [ ] Frontend component tests
-- [ ] E2E testing
-- [ ] Performance optimization
-
-## License
-
-ISC
+</div>
