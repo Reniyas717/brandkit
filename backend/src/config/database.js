@@ -7,13 +7,8 @@ dns.setDefaultResultOrder('ipv4first');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  },
-  // Connection pool settings
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
+  ssl: { rejectUnauthorized: false },
+  family: 4
 });
 
 pool.on('error', (err) => {
